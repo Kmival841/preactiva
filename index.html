@@ -3,1048 +3,1023 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Preactiva — Diagnóstico Personal</title>
+<title>Preactiva</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --dk:#0D4A3A;--tl:#2EC4A5;--mn:#A8D8CF;--lt:#E8F5F2;
   --cr:#E8643A;--am:#F0A500;--pu:#7F77DD;
-  --bg0:#fff;--bg1:#F2FAF8;--t0:#0D2E26;--t1:#3D6B5E;--t2:#7AADA0;
-  --bl:rgba(13,74,58,0.10);
-  --fh:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+  --bg0:#fff;--bg1:#F2FAF8;--bg2:#E8F5F2;
+  --t0:#0D2E26;--t1:#3D6B5E;--t2:#7AADA0;
+  --bl:rgba(13,74,58,0.10);--bm:rgba(13,74,58,0.20);
   --rmd:10px;--rlg:14px;--rxl:18px;
+  --fh:'Barlow Condensed',sans-serif;--fb:'Barlow',sans-serif;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg0:#0D2E26;--bg1:#112E26;--bg2:#091E18;
+    --t0:#E8F5F2;--t1:#A8D8CF;--t2:#5A9A8A;
+    --bl:rgba(46,196,165,0.12);--bm:rgba(46,196,165,0.22);--lt:#0a2e22;}
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{min-height:100vh;font-family:var(--fb);background:var(--dk);color:var(--t0);}
-.shell{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
-.sc{display:none;flex-direction:column;}
-.sc.active{display:flex;}
+html,body{height:100%;font-family:var(--fb);background:var(--bg2);color:var(--t0);}
 
-/* WELCOME */
-.welcome{min-height:100vh;align-items:center;justify-content:center;padding:52px 28px 44px;text-align:center;position:relative;overflow:hidden;}
-.wlogo{font-family:var(--fh);font-size:42px;font-weight:900;text-transform:uppercase;color:#fff;letter-spacing:-1px;margin-bottom:4px;}
-.wlogo span{color:var(--tl);}
-.wtag{font-size:11px;color:var(--mn);text-transform:uppercase;letter-spacing:2.5px;margin-bottom:44px;}
-.whead{font-family:var(--fh);font-size:44px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.0;margin-bottom:16px;letter-spacing:-1px;}
-.whead span{color:var(--tl);}
-.wsub{font-size:15px;color:var(--mn);line-height:1.7;margin-bottom:36px;max-width:340px;}
-.wstats{display:flex;gap:28px;justify-content:center;margin-bottom:36px;}
-.wsn{font-family:var(--fh);font-size:28px;font-weight:900;color:var(--tl);}
-.wsl{font-size:11px;color:var(--mn);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
-.btnstart{background:var(--tl);color:var(--dk);border:none;border-radius:var(--rxl);padding:16px 40px;font-family:var(--fh);font-size:18px;font-weight:900;text-transform:uppercase;cursor:pointer;width:100%;max-width:340px;transition:background 0.15s;}
-.btnstart:hover{background:var(--mn);}
-.wnote{font-size:12px;color:var(--t2);margin-top:14px;}
+/* AUTH */
+.asc{min-height:100vh;background:var(--dk);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;}
+.asc.hidden{display:none;}
+.alo{font-family:var(--fh);font-size:38px;font-weight:900;text-transform:uppercase;color:#fff;letter-spacing:-1px;text-align:center;}
+.alo span{color:var(--tl);}
+.als{font-size:11px;color:var(--mn);text-transform:uppercase;letter-spacing:2px;text-align:center;margin:4px 0 28px;}
+.acd{background:var(--bg0);border-radius:var(--rxl);padding:28px 24px;width:100%;max-width:380px;}
+.atl{font-family:var(--fh);font-size:24px;font-weight:800;text-transform:uppercase;color:var(--dk);margin-bottom:4px;}
+.asb{font-size:13px;color:var(--t1);margin-bottom:22px;}
+.afl{margin-bottom:13px;}
+.alb{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--t1);margin-bottom:5px;display:block;}
+.ain{width:100%;border:1.5px solid var(--bl);border-radius:var(--rmd);padding:11px 14px;font-family:var(--fb);font-size:15px;color:var(--t0);background:var(--bg1);transition:border-color 0.15s;}
+.ain:focus{outline:none;border-color:var(--tl);}
+.abtn{width:100%;background:var(--tl);color:var(--dk);border:none;border-radius:var(--rmd);padding:13px;font-family:var(--fh);font-size:16px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:6px;transition:background 0.15s;}
+.abtn:hover{background:var(--mn);}
+.abtn:disabled{opacity:0.45;cursor:not-allowed;}
+.asw{text-align:center;margin-top:16px;font-size:13px;color:var(--t1);}
+.asw a{color:var(--tl);cursor:pointer;font-weight:600;}
+.aerr{background:rgba(232,100,58,0.1);color:var(--cr);border:1px solid rgba(232,100,58,0.2);border-radius:var(--rmd);padding:10px 14px;font-size:13px;margin-bottom:12px;display:none;}
+.aerr.show{display:block;}
+.aok{background:var(--lt);color:var(--dk);border:1px solid var(--tl);border-radius:var(--rmd);padding:10px 14px;font-size:13px;margin-bottom:12px;display:none;}
+.aok.show{display:block;}
 
-/* QUIZ */
-.qbar{padding:16px 20px;display:flex;align-items:center;gap:14px;flex-shrink:0;}
-.qback{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:none;cursor:pointer;color:var(--mn);font-size:18px;display:flex;align-items:center;justify-content:center;transition:background 0.15s;}
-.qback:hover{background:rgba(255,255,255,0.15);}
-.progwrap{flex:1;background:rgba(255,255,255,0.12);border-radius:4px;height:5px;}
-.progfill{height:5px;border-radius:4px;background:var(--tl);transition:width 0.4s ease;}
-.qcount{font-size:12px;color:var(--mn);font-weight:600;white-space:nowrap;}
-.qcard{flex:1;padding:20px 24px 40px;overflow-y:auto;}
-.qblock{font-size:10px;color:var(--tl);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:10px;}
-.qtext{font-family:var(--fh);font-size:26px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.1;margin-bottom:8px;letter-spacing:-0.5px;}
-.qtext span{color:var(--tl);}
-.qsub{font-size:13px;color:var(--mn);line-height:1.5;margin-bottom:22px;}
-.opts{display:flex;flex-direction:column;gap:9px;}
-.opt{background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.12);border-radius:var(--rlg);padding:13px 16px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:12px;}
-.opt:hover{background:rgba(46,196,165,0.1);border-color:rgba(46,196,165,0.5);}
-.opt.sel{background:rgba(46,196,165,0.15);border-color:var(--tl);}
-.oico{font-size:20px;width:26px;text-align:center;flex-shrink:0;}
-.otxt{flex:1;}
-.olb{font-size:14px;font-weight:600;color:#fff;display:block;}
-.osb{font-size:11px;color:var(--mn);display:block;margin-top:1px;}
-.ochk{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
-.opt.sel .ochk{background:var(--tl);border-color:var(--tl);}
-.opt.sel .ochk::after{content:'✓';font-size:11px;color:var(--dk);font-weight:700;}
-.multi-hint{font-size:11px;color:var(--t2);margin-bottom:10px;}
-.scale-wrap{margin-bottom:20px;}
-.scale-lbs{display:flex;justify-content:space-between;font-size:11px;color:var(--mn);margin-bottom:8px;}
-.scale-btns{display:flex;gap:5px;}
-.sbtn{flex:1;aspect-ratio:1;border-radius:var(--rmd);border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);cursor:pointer;font-family:var(--fh);font-size:14px;font-weight:700;color:var(--mn);transition:all 0.15s;}
-.sbtn:hover{border-color:var(--tl);color:var(--tl);}
-.sbtn.sel{background:var(--tl);border-color:var(--tl);color:var(--dk);}
-.btnnext{background:var(--tl);color:var(--dk);border:none;border-radius:var(--rxl);padding:14px;font-family:var(--fh);font-size:15px;font-weight:900;text-transform:uppercase;cursor:pointer;width:100%;margin-top:20px;transition:background 0.15s;}
-.btnnext:hover{background:var(--mn);}
-.btnnext:disabled{opacity:0.3;cursor:not-allowed;}
+/* APP */
+.app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--bg2);}
+.topbar{background:var(--bg0);border-bottom:0.5px solid var(--bl);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.lgp{font-family:var(--fh);font-size:22px;font-weight:900;color:var(--dk);text-transform:uppercase;}
+.lga{font-family:var(--fh);font-size:22px;font-weight:900;color:var(--tl);text-transform:uppercase;}
+.ava{width:34px;height:34px;border-radius:50%;background:var(--lt);border:1.5px solid var(--mn);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--dk);cursor:pointer;}
+.cnt{flex:1;overflow-y:auto;padding:20px 16px 90px;}
+.sec{display:none;animation:fu 0.22s ease;}
+.sec.active{display:block;}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* GENERATING */
-.gen{min-height:100vh;align-items:center;justify-content:center;padding:32px 24px;text-align:center;}
-.spinner{width:52px;height:52px;border-radius:50%;border:3px solid rgba(46,196,165,0.2);border-top-color:var(--tl);animation:spin 0.8s linear infinite;margin:0 auto 22px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.gentl{font-family:var(--fh);font-size:26px;font-weight:900;color:#fff;text-transform:uppercase;margin-bottom:8px;}
-.gensb{font-size:13px;color:var(--mn);margin-bottom:24px;}
-.gsteps{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px;}
-.gstep{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mn);transition:color 0.3s;}
-.gstep.done{color:var(--tl);}
-.gstep.cur{color:#fff;}
-.gdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;transition:background 0.3s;}
-.gstep.done .gdot{background:var(--tl);}
-.gstep.cur .gdot{background:#fff;animation:pls 1s infinite;}
+/* TYPOGRAPHY */
+.grt{font-family:var(--fh);font-size:26px;font-weight:900;text-transform:uppercase;color:var(--t0);margin-bottom:4px;letter-spacing:-0.5px;line-height:1.1;}
+.grt em{font-style:normal;color:var(--tl);}
+.sub{font-size:13px;color:var(--t1);margin-bottom:18px;}
+.stl{font-family:var(--fh);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--dk);margin-bottom:10px;margin-top:20px;opacity:0.6;}
+
+/* STAGE BANNER */
+.sbanner{background:var(--dk);border-radius:var(--rxl);padding:20px;margin-bottom:16px;position:relative;overflow:hidden;}
+.sbanner::before{content:'';position:absolute;right:-20px;top:-20px;width:120px;height:120px;border-radius:50%;background:rgba(46,196,165,0.1);}
+.sey{font-size:10px;color:var(--mn);text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:6px;position:relative;z-index:1;}
+.snm{font-family:var(--fh);font-size:32px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1;position:relative;z-index:1;margin-bottom:6px;}
+.snm span{color:var(--tl);}
+.sds{font-size:13px;color:var(--mn);line-height:1.5;position:relative;z-index:1;margin-bottom:14px;}
+.spw{background:rgba(255,255,255,0.1);border-radius:4px;height:4px;margin-bottom:6px;position:relative;z-index:1;}
+.spf{height:4px;border-radius:4px;background:var(--tl);transition:width 0.5s ease;}
+.spl{font-size:11px;color:var(--mn);position:relative;z-index:1;}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{font-family:var(--fh);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--bl);background:var(--bg0);color:var(--t1);cursor:pointer;white-space:nowrap;transition:all 0.15s;}
+.tab.on{background:var(--dk);color:var(--tl);border-color:var(--dk);}
+
+/* CARDS */
+.card{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:16px;margin-bottom:10px;}
+.addbadge{display:inline-flex;align-items:center;gap:5px;background:var(--lt);border:1px solid var(--mn);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--dk);margin-bottom:16px;font-family:var(--fh);text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ETAPA ITEM */
+.eitem{display:flex;align-items:flex-start;gap:12px;background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:8px;}
+.enum{width:32px;height:32px;border-radius:50%;background:var(--dk);color:var(--tl);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:14px;font-weight:900;flex-shrink:0;}
+.etl{font-size:14px;font-weight:600;color:var(--t0);margin-bottom:2px;}
+.eds{font-size:12px;color:var(--t1);line-height:1.5;}
+
+/* ADDICTION SECTION HEADER */
+.addhead{display:flex;align-items:center;gap:8px;margin:18px 0 8px;}
+.addhead-icon{width:36px;height:36px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.addhead-title{font-family:var(--fh);font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;color:var(--t0);}
+.addhead-sub{font-size:11px;color:var(--t1);}
+
+/* EXERCISE CARDS */
+.exc{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;transition:border-color 0.15s;}
+.exc:hover{border-color:var(--bm);}
+.exic{width:40px;height:40px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ic-tl{background:var(--lt);}
+.ic-am{background:rgba(240,165,0,0.1);}
+.ic-cr{background:rgba(232,100,58,0.08);}
+.ic-pu{background:rgba(127,119,221,0.1);}
+.exif{flex:1;}
+.extg{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;margin-bottom:3px;font-family:var(--fh);}
+.tg-tl{color:var(--tl);}
+.tg-am{color:var(--am);}
+.tg-cr{color:var(--cr);}
+.tg-pu{color:var(--pu);}
+.exnm{font-size:14px;font-weight:600;color:var(--t0);margin-bottom:3px;}
+.exds{font-size:12px;color:var(--t1);line-height:1.5;margin-bottom:8px;}
+
+/* BUTTONS */
+.btnp{background:var(--tl);color:var(--dk);border:none;border-radius:var(--rmd);padding:10px 18px;font-family:var(--fh);font-size:14px;font-weight:900;text-transform:uppercase;cursor:pointer;transition:background 0.15s;}
+.btnp:hover{background:var(--mn);}
+.btnp:disabled{opacity:0.45;cursor:not-allowed;}
+.btno{background:none;color:var(--tl);border:1.5px solid var(--tl);border-radius:14px;padding:5px 12px;font-size:11px;font-family:var(--fh);font-weight:700;text-transform:uppercase;cursor:pointer;transition:all 0.15s;}
+.btno:hover{background:var(--lt);}
+
+/* AI PANEL */
+.aipanel{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rxl);overflow:hidden;margin-bottom:16px;}
+.aiph{padding:14px 16px;border-bottom:0.5px solid var(--bl);display:flex;align-items:center;justify-content:space-between;}
+.aiptl{font-size:15px;font-weight:600;color:var(--t0);}
+.aibadge{font-size:11px;background:var(--dk);color:var(--tl);border-radius:8px;padding:3px 10px;font-family:var(--fh);font-weight:700;text-transform:uppercase;}
+.aimsgs{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:200px;max-height:360px;overflow-y:auto;}
+.aimsg{display:flex;gap:10px;align-items:flex-start;}
+.aimsg.user{flex-direction:row-reverse;}
+.aimav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;}
+.av-ai{background:var(--lt);color:var(--dk);border:1px solid var(--mn);}
+.av-u{background:var(--bg1);color:var(--t1);border:1px solid var(--bl);}
+.bbl{max-width:82%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.65;}
+.bbl-ai{background:var(--bg1);color:var(--t0);border-radius:4px 12px 12px 12px;}
+.bbl-u{background:var(--tl);color:var(--dk);border-radius:12px 4px 12px 12px;font-weight:500;}
+.typing{display:flex;align-items:center;gap:4px;padding:10px 14px;background:var(--bg1);border-radius:4px 12px 12px 12px;width:fit-content;}
+.td{width:6px;height:6px;border-radius:50%;background:var(--t2);animation:bnc 1.2s infinite;}
+.td:nth-child(2){animation-delay:0.2s;}
+.td:nth-child(3){animation-delay:0.4s;}
+@keyframes bnc{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.aiinr{padding:12px 16px;border-top:0.5px solid var(--bl);display:flex;gap:8px;}
+.aiin{flex:1;border:0.5px solid var(--bl);border-radius:20px;padding:9px 14px;font-family:var(--fb);font-size:14px;background:var(--bg1);color:var(--t0);}
+.aiin:focus{outline:none;border-color:var(--tl);}
+.sndbtn{width:36px;height:36px;border-radius:50%;background:var(--tl);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--dk);font-size:15px;flex-shrink:0;transition:background 0.15s;}
+.sndbtn:hover{background:var(--mn);}
+.sndbtn:disabled{opacity:0.4;cursor:not-allowed;}
+.backbtn{display:flex;align-items:center;gap:6px;background:none;border:none;font-family:var(--fb);font-size:13px;color:var(--t1);cursor:pointer;padding:0;margin-bottom:14px;}
+.iabd{display:inline-flex;align-items:center;gap:5px;font-size:11px;background:var(--dk);color:var(--tl);border-radius:10px;padding:4px 12px;margin-bottom:14px;font-weight:700;font-family:var(--fh);text-transform:uppercase;}
+.iadot{width:6px;height:6px;border-radius:50%;background:var(--tl);animation:pls 2s infinite;}
 @keyframes pls{0%,100%{opacity:1}50%{opacity:0.4}}
 
-/* RESULTS */
-.res{background:var(--bg1);flex:1;}
-.rhead{background:var(--dk);padding:22px 22px 28px;position:relative;overflow:hidden;}
-.rhead::before{content:'';position:absolute;right:-20px;top:-20px;width:130px;height:130px;border-radius:50%;background:rgba(46,196,165,0.08);}
-.rey{font-size:10px;color:var(--mn);text-transform:uppercase;letter-spacing:2px;font-weight:700;position:relative;z-index:1;margin-bottom:6px;}
-.rnm{font-family:var(--fh);font-size:30px;font-weight:900;color:#fff;text-transform:uppercase;line-height:1;position:relative;z-index:1;margin-bottom:6px;}
-.rnm span{color:var(--tl);}
-.rint{font-size:13px;color:var(--mn);line-height:1.6;position:relative;z-index:1;}
-.rbody{padding:18px 18px 120px;}
-.rsect{margin-bottom:14px;}
-.rstl{font-family:var(--fh);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--dk);opacity:0.5;margin-bottom:8px;}
-.rcard{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:8px;}
-.plhd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
-.plnm{font-family:var(--fh);font-size:20px;font-weight:900;text-transform:uppercase;color:var(--dk);}
-.plbg{background:var(--dk);color:var(--tl);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;font-family:var(--fh);text-transform:uppercase;}
-.plprice{font-family:var(--fh);font-size:26px;font-weight:900;color:var(--tl);margin-bottom:3px;}
-.plnote{font-size:12px;color:var(--t1);margin-bottom:12px;line-height:1.5;}
-.plft{display:flex;flex-direction:column;gap:5px;}
+/* DIARIO */
+.msel{display:flex;gap:8px;margin:10px 0;}
+.mopt{flex:1;padding:10px 6px;text-align:center;border:1.5px solid var(--bl);border-radius:var(--rmd);cursor:pointer;font-size:13px;background:var(--bg0);color:var(--t1);transition:all 0.15s;}
+.mopt.s-b{border-color:var(--tl);background:var(--lt);color:var(--dk);}
+.mopt.s-r{border-color:var(--am);background:rgba(240,165,0,0.08);color:var(--am);}
+.mopt.s-d{border-color:var(--cr);background:rgba(232,100,58,0.08);color:var(--cr);}
+textarea.jtxt{width:100%;min-height:90px;border:0.5px solid var(--bl);border-radius:var(--rmd);padding:10px 12px;font-family:var(--fb);font-size:14px;color:var(--t0);background:var(--bg1);resize:vertical;margin-bottom:10px;line-height:1.6;}
+textarea.jtxt:focus{outline:none;border-color:var(--tl);}
+.jent{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:10px;}
+.jdt{font-size:11px;color:var(--t2);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;}
+.mbadge{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:500;display:inline-block;margin-bottom:8px;}
+.mb-b{background:var(--lt);color:var(--dk);}
+.mb-r{background:rgba(240,165,0,0.1);color:var(--am);}
+.mb-d{background:rgba(232,100,58,0.08);color:var(--cr);}
+.jtx{font-size:14px;color:var(--t1);line-height:1.65;}
+
+/* TERAPEUTA */
+.terinf{display:flex;align-items:center;gap:12px;background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:14px;}
+.terav{width:48px;height:48px;border-radius:50%;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:var(--dk);}
+.ternm{font-size:15px;font-weight:600;color:var(--t0);}
+.terst{font-size:12px;color:var(--t1);display:flex;align-items:center;gap:5px;margin-top:2px;}
+.ondot{width:7px;height:7px;border-radius:50%;background:var(--tl);}
+.chatarea{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;max-height:340px;overflow-y:auto;}
+.msg{display:flex;gap:10px;align-items:flex-start;}
+.msg.me{flex-direction:row-reverse;}
+.mav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;}
+.av-tr{background:var(--lt);color:var(--dk);border:1px solid var(--mn);}
+.av-me{background:var(--bg1);color:var(--t1);border:1px solid var(--bl);}
+.mbbl{max-width:76%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.55;}
+.mb-th{background:var(--bg1);color:var(--t0);border-radius:4px 14px 14px 14px;}
+.mb-me{background:var(--tl);color:var(--dk);border-radius:14px 4px 14px 14px;font-weight:500;}
+.mtime{font-size:11px;color:var(--t2);align-self:flex-end;margin-bottom:2px;}
+.chatinr{display:flex;gap:8px;}
+.chatin{flex:1;border:0.5px solid var(--bl);border-radius:20px;padding:9px 14px;font-family:var(--fb);font-size:14px;background:var(--bg1);color:var(--t0);}
+.chatin:focus{outline:none;border-color:var(--tl);}
+
+/* COMUNIDAD */
+.pcard{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:10px;}
+.phdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.pav{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;}
+.pnm{font-size:14px;font-weight:600;color:var(--t0);}
+.pago{font-size:12px;color:var(--t2);}
+.ptxt{font-size:14px;color:var(--t1);line-height:1.65;margin-bottom:10px;}
+.pact{font-size:12px;color:var(--t1);background:none;border:none;cursor:pointer;font-family:var(--fb);transition:color 0.15s;}
+.pact:hover{color:var(--tl);}
+.pact.liked{color:var(--cr);}
+.nparea{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:14px;}
+.npinp{width:100%;border:none;background:none;font-family:var(--fb);font-size:14px;color:var(--t0);resize:none;min-height:56px;line-height:1.6;}
+.npinp:focus{outline:none;}
+.npinp::placeholder{color:var(--t2);}
+.npft{border-top:0.5px solid var(--bl);padding-top:10px;margin-top:8px;display:flex;justify-content:flex-end;}
+
+/* PLAN */
+.planinf{background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:16px;margin-bottom:10px;}
+.plhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.plnm{font-family:var(--fh);font-size:18px;font-weight:900;text-transform:uppercase;color:var(--dk);}
+.plpr{font-family:var(--fh);font-size:16px;font-weight:700;color:var(--tl);}
+.plft{display:flex;flex-direction:column;gap:6px;}
 .plfi{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t1);}
 .plfi::before{content:'✓';color:var(--tl);font-weight:700;flex-shrink:0;}
-.dtxt{font-size:13px;color:var(--t1);line-height:1.7;}
-.dtxt strong{color:var(--dk);font-weight:600;}
-.strow{display:flex;align-items:center;gap:10px;background:var(--bg1);border-radius:var(--rmd);padding:11px 12px;margin-bottom:7px;}
-.stico{width:34px;height:34px;border-radius:var(--rmd);background:var(--dk);color:var(--tl);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:13px;font-weight:900;flex-shrink:0;}
-.stnm{font-size:13px;font-weight:600;color:var(--t0);}
-.stdr{font-size:11px;color:var(--t2);}
-.stcur{font-size:10px;background:var(--lt);color:var(--dk);border:0.5px solid var(--mn);border-radius:10px;padding:2px 8px;font-weight:600;white-space:nowrap;}
-.expill{display:flex;align-items:center;gap:10px;background:var(--bg1);border-radius:var(--rmd);padding:10px 12px;margin-bottom:7px;}
-.epic{font-size:18px;width:26px;text-align:center;flex-shrink:0;}
-.epnm{font-size:13px;font-weight:600;color:var(--t0);}
-.epwhy{font-size:11px;color:var(--t2);margin-top:1px;}
-.rcta{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--bg0);border-top:0.5px solid var(--bl);padding:14px 18px 26px;}
-.btncta{background:var(--tl);color:var(--dk);border:none;border-radius:var(--rxl);padding:14px;font-family:var(--fh);font-size:16px;font-weight:900;text-transform:uppercase;cursor:pointer;width:100%;transition:background 0.15s;}
-.btncta:hover{background:var(--mn);}
-.ctanote{text-align:center;font-size:11px;color:var(--t2);margin-top:7px;}
 
-/* REGISTER */
-.reghead{padding:20px 22px;background:var(--dk);flex-shrink:0;}
-.regtl{font-family:var(--fh);font-size:28px;font-weight:900;text-transform:uppercase;color:#fff;margin-bottom:3px;}
-.regsb{font-size:13px;color:var(--mn);}
-.regbody{flex:1;padding:20px 18px 100px;background:var(--bg1);}
-.sumbox{background:var(--dk);border-radius:var(--rlg);padding:13px;margin-bottom:18px;}
-.sumlb{font-size:10px;color:var(--mn);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:5px;}
-.sumpl{font-family:var(--fh);font-size:20px;font-weight:900;color:#fff;text-transform:uppercase;}
-.sumpl span{color:var(--tl);}
-.rfl{margin-bottom:12px;}
-.rlb{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--t1);margin-bottom:5px;display:block;}
-.rin{width:100%;border:1.5px solid var(--bl);border-radius:var(--rmd);padding:11px 13px;font-family:var(--fb);font-size:15px;color:var(--t0);background:var(--bg0);}
-.rin:focus{outline:none;border-color:var(--tl);}
-.rerr{background:rgba(232,100,58,0.1);color:var(--cr);border:1px solid rgba(232,100,58,0.2);border-radius:var(--rmd);padding:10px 13px;font-size:13px;margin-bottom:10px;display:none;}
-.rerr.show{display:block;}
-.rok{background:var(--lt);color:var(--dk);border:1px solid var(--tl);border-radius:var(--rmd);padding:10px 13px;font-size:13px;margin-bottom:10px;display:none;}
-.rok.show{display:block;}
-.loglink{text-align:center;margin-top:12px;font-size:13px;color:var(--t1);}
-.loglink a{color:var(--tl);cursor:pointer;font-weight:600;}
+/* NAVBAR */
+.navbar{background:var(--bg0);border-top:0.5px solid var(--bl);display:flex;align-items:center;justify-content:space-around;padding:8px 0 14px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:10;}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 14px;border-radius:var(--rmd);border:none;background:none;transition:background 0.15s;}
+.ni:hover{background:var(--bg1);}
+.nlb{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--t2);font-family:var(--fh);}
+.ni.on .nlb{color:var(--tl);}
+.nsvg{width:20px;height:20px;stroke:var(--t2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.ni.on .nsvg{stroke:var(--tl);}
 </style>
-  <script src="https://checkout.wompi.co/widget.js" data-render="button" id="wompi-script" async></script>
 </head>
 <body>
-<div class="shell">
 
-<!-- BIENVENIDA -->
-<div id="sc-w" class="sc welcome">
-  <div style="margin-bottom:12px;width:100%;max-width:240px;">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 968.57 619.79" style="width:100%;display:block;">
-  <defs>
-    <style>
-      .pc1{fill:#00b791;mix-blend-mode:multiply}
-      .pc2{fill:#006c91;mix-blend-mode:multiply}
-      .pc3{fill:#5a5a58;mix-blend-mode:multiply;font-family:KeepCalm-Medium,Keep Calm;font-size:35.37px;font-weight:500}
-      .pc4{fill:#00ae9c;mix-blend-mode:multiply}
-      .pc5{fill:#fff;opacity:.52}
-      .pc6{isolation:isolate}
-      .pc7{fill:#00373d}
-      .pc8{letter-spacing:-.07em}
-      .pc9{letter-spacing:.06em}
-      .pc10{letter-spacing:.03em}
-    </style>
-  </defs>
-  <g class="pc6">
-    <g>
-      <g>
-        <path class="pc5" d="M750.35,541c54.81-25.9,107.21-59.71,147.85-107.87,40.64-48.16,68.87-111.85,70.32-180.61,1.45-68.76-26.57-141.98-77.9-183.28-65.39-52.63-150.39-45.19-226.83-35.35-144.19,18.56-288.39,37.12-432.58,55.67-47.03,6.05-96.55,13.23-132.49,46-42.78,39.01-57.27,109.4-44.66,173.08,12.62,63.68,49.01,120.61,92.96,164.94,55.97,56.47,130.17,115.43,203.75,126.09,88.63,12.84,178.08,8.93,263.6-11.19,46.76-11,92.36-26.86,135.98-47.47Z"/>
-        <path class="pc5" d="M227.02,96.24c-46.71,31.17-90.22,70.16-121.19,122.68-30.98,52.51-48.67,119.7-41.32,189.64,7.36,69.95,42.15,141.81,94.16,179.2,66.26,47.63,142.82,32.53,211.28,15.75,129.13-31.65,258.26-63.31,387.39-94.96,42.12-10.32,86.36-22.01,114.99-58.48,34.08-43.42,38.41-116.18,18.87-179.72-19.54-63.54-59.91-118.12-105.57-159.23C727.46,58.74,652.37,5.46,583.94,1.17c-82.43-5.16-163.5,6.75-238.92,34.78-41.25,15.33-80.82,35.48-117.99,60.29Z"/>
-        <path class="pc5" d="M688.39,69.54c57.77,22.72,113.75,53.73,159,100.33,45.25,46.59,79.21,110.03,86.42,180.57,7.22,70.54-15.09,147.76-63.7,193.85-61.93,58.72-148.78,57.12-227.14,52.45-147.82-8.82-295.64-17.64-443.46-26.46-48.21-2.88-99.04-6.73-138.24-37.85C14.61,495.38-5.98,424.09,1.5,357.77c7.48-66.32,39.64-127.4,80.51-176.08,52.06-62,122.39-127.85,196.15-144.03,88.83-19.49,179.9-21.83,268.33-7.23,48.36,7.98,95.94,21.03,141.91,39.11Z"/>
-      </g>
-      <g>
-        <text class="pc3" transform="translate(169.81 453.79) scale(.85 1)"><tspan class="pc9" x="0" y="0">ADI</tspan><tspan class="pc10" x="77.92" y="0">C</tspan><tspan class="pc9" x="107.59" y="0">CIONES &amp; BIENES</tspan><tspan class="pc8" x="467.65" y="0">T</tspan><tspan class="pc9" x="488.13" y="0">AR INTEGRAL </tspan></text>
-        <path class="pc4" d="M429.1,273.03c-4.59-2.08-8.19-5.84-10.4-10.15-2.9-5.64-3.69-12.15-3.79-18.6-.36-23.83,6.22-50.96,23.58-70.85,2.78-3.18,5.81-6.17,9.05-8.96,14.16-12.14,34.84-18.81,51.72-13.29,9.39,3.07,16.82,9.53,22.57,16.89,7.85,10.05,13.03,22.81,10.13,35.7-3.17,14.11-15.15,25.64-26.99,35.68-13.84,11.74-19.38,14.72-22.72,19.37-1,1.39-1.51,2.81-2.81,5.51-5.35,11.13-8.47,21.56-8.47,21.56h0c-.59.45-1.48,1.13-2.6,1.91-3.97,2.79-5.96,4.18-7.41,4.18-2.38,0-3.05-2.54-6.55-7.54-2.67-3.81-5.24-7.62-9.88-8.79-3.5-.88-7.34-.56-10.91-1.21-1.59-.29-3.1-.77-4.52-1.42Z"/>
-        <path class="pc2" d="M564.24,125.93c-18.36-3.79-33.84-1.35-43.78.31-8.18,1.36-19.67,3.98-32.9,9.42,0,0-38.5,17.77-57.88,49.82-.89,1.47-3.18,5.26-1.74,8.3.87,1.83,2.99,3.16,5.21,3.28,3.63.19,6.71-3.05,7.6-3.56,22.59-13.01,53.02-10.9,70.42,4.89,10.02,9.09,15.71,21.78,26.02,30.6,4.41,3.77,23.59,16.1,48.5,10.21,15.28-3.61,31.56-13.95,39.01-28.83,14.51-28.96-11.49-60.95-32.88-73.98-1.98-1.21-12.17-7.28-27.58-10.45Z"/>
-        <path class="pc1" d="M456.46,257.53c7.93,3.43,18.85,8.22,30.14,4.5,12.46-4.1,13.6-14.66,22.74-15.26,8.69-.56,9.96,8.81,22.44,12.08,10.81,2.83,21.33-1.23,25.43-2.76,20.25-7.58,29.06-26.29,31.96-32.45,7.29-15.48,6.12-28.75,5.62-33.67-.73-7.21-3.92-25.82-20.84-40.18-18.04-15.31-39.97-15.84-48.44-16.04-24.79-.6-43.67,8.86-53.17,13.77-16.77,8.66-26.79,18.78-29.47,21.56-5.44,5.66-11.85,12.46-15.95,22.93-1.53,3.89-5.38,13.94-3.31,26.28,1.91,11.43,7.85,18.64,11.83,23.34,2.93,3.46,9.32,10.83,21,15.88Z"/>
-        <g>
-          <path class="pc7" d="M318.78,307.49c-4.05-2.27-8.18-3.41-12.4-3.41s-8.24,1.11-11.73,3.33c-3.49,2.22-6.68,5.38-9.57,9.49v-10.32h-21.13c-.58-3.42-1.55-6.69-2.92-9.82-2.39-5.43-5.64-10.15-9.75-14.15-4.11-3.99-8.95-7.13-14.5-9.4-5.56-2.27-11.45-3.41-17.67-3.41h-47.85v132.96h25.79v-43.43h22.02c6.23,0,12.12-1.14,17.68-3.41,5.56-2.27,10.4-5.43,14.51-9.49,4.11-4.05,7.37-8.82,9.76-14.31.03-.08.06-.15.09-.23v70.87h23.96v-54.25c0-3.99.55-7.35,1.66-10.07,1.11-2.72,2.47-4.91,4.08-6.57,1.61-1.66,3.33-2.85,5.16-3.58,1.83-.72,3.52-1.08,5.08-1.08,2.88,0,5.74.97,8.57,2.91,2.83,1.94,5.41,4.19,7.74,6.74l12.81-20.3c-3.55-3.77-7.35-6.79-11.4-9.07ZM236.91,323.79c-1.28,3.05-3.02,5.74-5.24,8.07-2.22,2.33-4.83,4.19-7.82,5.57-3,1.39-6.21,2.08-9.65,2.08h-17.14v-50.26h17.14c3.44,0,6.66.67,9.65,2,3,1.33,5.6,3.11,7.82,5.33,2.22,2.22,3.97,4.83,5.24,7.82,1.27,3,1.91,6.21,1.91,9.65s-.64,6.69-1.91,9.73Z"/>
-          <rect class="pc7" x="632.55" y="264.8" width="24.96" height="24.96"/>
-          <path class="pc7" d="M820.69,329.53c-1.71-5.21-4.65-9.93-8.84-14.14-3.2-3.33-7.39-6.05-12.59-8.15-5.2-2.11-11.12-3.16-17.78-3.16-7.1,0-14.01,1.33-20.72,3.99-4.76,1.89-9.1,4.34-13.04,7.34l3.31-8.84h-26.13l-21.8,64.57-21.8-64.57h-24.13v-.17h-46.59v-28.12h-7.82c-1.78,10.1-5.08,18.31-9.9,24.63-3.68,4.82-8.23,8.74-13.62,11.76-3.45-2.74-7.23-4.94-11.34-6.6-6.6-2.66-13.56-3.99-20.88-3.99s-13.76,1.31-19.96,3.91c-6.21,2.61-11.57,6.19-16.08,10.73-4.52,4.55-8.1,9.9-10.74,16.06-1.14,2.66-2.03,5.42-2.67,8.27-.35-5.24-1.12-9.75-2.35-13.51-1.71-5.21-4.65-9.93-8.84-14.14-3.2-3.33-7.39-6.05-12.59-8.15-5.2-2.11-11.12-3.16-17.78-3.16-7.1,0-14.01,1.33-20.72,3.99-6.71,2.66-12.62,6.44-17.72,11.32l14.15,14.31c3.55-3.22,7.1-5.43,10.65-6.66,3.55-1.22,6.99-1.83,10.32-1.83,6.88,0,12.15,1.66,15.81,4.99,3.66,3.33,5.49,7.82,5.49,13.48h-13.81c-6.32,0-12.23.67-17.72,2-5.49,1.33-10.29,3.36-14.39,6.07-2.61,1.73-4.87,3.73-6.79,6,.08-1.11.13-2.19.13-3.25,0-7.43-1.39-14.23-4.16-20.39-2.77-6.16-6.55-11.45-11.32-15.89-4.77-4.44-10.26-7.9-16.47-10.4-6.21-2.5-12.7-3.74-19.47-3.74-7.1,0-13.76,1.33-19.97,3.99-6.21,2.66-11.65,6.27-16.31,10.82-4.66,4.55-8.32,9.9-10.98,16.06-2.66,6.16-3.99,12.73-3.99,19.72s1.33,13.56,3.99,19.72c2.66,6.16,6.3,11.51,10.9,16.06,4.6,4.55,10.04,8.15,16.31,10.82,6.27,2.66,13.01,3.99,20.22,3.99s13.84-1.03,20.22-3.08c6.38-2.05,12.9-5.58,19.55-10.57l-15.14-15.14c-2.89,2.55-6.49,4.58-10.82,6.07-4.33,1.5-8.65,2.25-12.98,2.25-3.55,0-6.8-.53-9.73-1.58-2.94-1.05-5.58-2.5-7.9-4.33-2.33-1.83-4.3-3.99-5.91-6.49-1.61-2.5-2.86-5.13-3.74-7.9h73.33c-1.51,3.45-2.28,7.33-2.28,11.65s.75,8.27,2.25,11.82c1.5,3.55,3.63,6.63,6.41,9.24,2.77,2.61,6.04,4.6,9.82,5.99,3.77,1.39,7.99,2.08,12.65,2.08,4.99,0,9.84-.56,14.56-1.66,4.71-1.11,9.18-3.1,13.4-5.99v5.16h23.96v-35.37c.63,2.55,1.44,5.02,2.46,7.42,2.64,6.21,6.25,11.57,10.82,16.06,4.57,4.49,9.96,8.02,16.17,10.57,6.21,2.55,12.81,3.83,19.8,3.83,7.54,0,14.75-1.44,21.63-4.33,6.88-2.88,12.76-7.1,17.64-12.65l-16.64-16.64c-2.33,3.55-5.44,6.46-9.32,8.74-3.89,2.27-8.21,3.41-12.98,3.41-3.66,0-7.16-.77-10.48-2.33-3.33-1.55-6.21-3.63-8.65-6.24-2.44-2.61-4.38-5.68-5.82-9.24-1.44-3.55-2.16-7.32-2.16-11.32s.72-7.76,2.16-11.32c1.44-3.55,3.41-6.63,5.91-9.24,2.5-2.6,5.38-4.68,8.65-6.24,3.27-1.55,6.74-2.33,10.4-2.33,4.99,0,9.24,1.06,12.73,3.16,3.49,2.11,6.46,4.77,8.9,7.99l8.48-8.65h9.16v42.1c0,5.99.53,11.21,1.58,15.64,1.05,4.44,2.75,8.1,5.08,10.98,2.33,2.89,5.43,5.02,9.32,6.41,3.88,1.39,8.65,2.08,14.31,2.08,3.22,0,6.43-.39,9.65-1.17,2.31-.56,4.41-1.32,6.32-2.28v.95h24.3v-90.44l34.11,90.61h23.63l30.43-81.2,11.83,11.97c3.55-3.22,7.1-5.43,10.65-6.66,3.55-1.22,6.99-1.83,10.32-1.83,6.88,0,12.15,1.66,15.81,4.99,3.66,3.33,5.49,7.82,5.49,13.48h-13.81c-6.32,0-12.23.67-17.72,2-5.49,1.33-10.29,3.36-14.39,6.07-4.11,2.72-7.35,6.1-9.73,10.15-2.39,4.05-3.58,8.79-3.58,14.23,0,4.33.75,8.27,2.25,11.82,1.5,3.55,3.63,6.63,6.41,9.24,2.77,2.61,6.04,4.6,9.82,5.99,3.77,1.39,7.99,2.08,12.65,2.08,4.99,0,9.84-.56,14.56-1.66,4.71-1.11,9.18-3.1,13.4-5.99v5.16h23.96v-53.25c0-8.1-.86-14.75-2.56-19.97ZM343.66,345.18c1.89-6.1,5.21-11.01,9.98-14.73,4.77-3.72,10.15-5.57,16.14-5.57s11.57,1.86,16.39,5.57c4.83,3.72,8.18,8.63,10.07,14.73h-52.59ZM473.79,378.79c-3.55,2.11-7.07,3.72-10.57,4.83-3.49,1.11-7.02,1.66-10.57,1.66-4.11,0-7.46-1.05-10.07-3.16-2.61-2.11-3.91-4.83-3.91-8.15,0-2.33.64-4.33,1.91-5.99,1.27-1.66,3-3.02,5.16-4.08,2.16-1.05,4.71-1.8,7.65-2.25,2.94-.44,6.07-.66,9.4-.66h10.98v17.81ZM628.22,382.79c-2.66.67-4.94,1-6.82,1-1.44,0-2.8-.17-4.08-.5-1.28-.33-2.41-.94-3.41-1.83-1-.89-1.8-2.11-2.41-3.66-.61-1.55-.92-3.55-.92-5.99v-43.77h22.3v52.91c-1.39.8-2.94,1.41-4.66,1.84ZM799.29,378.79c-3.55,2.11-7.07,3.72-10.57,4.83-3.49,1.11-7.02,1.66-10.57,1.66-4.11,0-7.46-1.05-10.07-3.16-2.61-2.11-3.91-4.83-3.91-8.15,0-2.33.64-4.33,1.91-5.99,1.27-1.66,3-3.02,5.16-4.08,2.16-1.05,4.71-1.8,7.65-2.25,2.94-.44,6.07-.66,9.4-.66h10.98v17.81Z"/>
-        </g>
-      </g>
-    </g>
-  </g>
-</svg>
-  </div>
-  <div class="whead">Tu camino hacia<br/>la <span>recuperación</span><br/>empieza aquí</div>
-  <p class="wsub">Responde algunas preguntas y recibirás un plan de tratamiento 100% personalizado para tu situación.</p>
-  <div class="wstats">
-    <div><div class="wsn">10+</div><div class="wsl">años de exp.</div></div>
-    <div><div class="wsn">4</div><div class="wsl">etapas terap.</div></div>
-    <div><div class="wsn">24/7</div><div class="wsl">acompañamiento</div></div>
-  </div>
-  <button class="btnstart" onclick="startQuiz()">Comenzar diagnóstico →</button>
-  <p class="wnote">Gratis · Confidencial · 5 minutos</p>
-</div>
-
-<!-- QUIZ -->
-<div id="sc-q" class="sc" style="min-height:100vh;">
-  <div class="qbar">
-    <button class="qback" onclick="goBack()">&#8592;</button>
-    <div class="progwrap"><div class="progfill" id="pf" style="width:0%"></div></div>
-    <span class="qcount" id="qc">1 / 20</span>
-  </div>
-  <div class="qcard" id="qcard"></div>
-</div>
-
-<!-- GENERANDO -->
-<div id="sc-g" class="sc gen">
-  <div class="spinner"></div>
-  <div class="gentl">Analizando<br/>tu perfil...</div>
-  <div class="gensb">Creando tu plan personalizado</div>
-  <div class="gsteps">
-    <div class="gstep cur" id="gs0"><div class="gdot"></div>Procesando tus respuestas</div>
-    <div class="gstep" id="gs1"><div class="gdot"></div>Identificando tipo de adicción</div>
-    <div class="gstep" id="gs2"><div class="gdot"></div>Evaluando nivel de impacto</div>
-    <div class="gstep" id="gs3"><div class="gdot"></div>Seleccionando plan óptimo</div>
-    <div class="gstep" id="gs4"><div class="gdot"></div>Generando recomendaciones</div>
+<!-- LOGIN -->
+<div class="asc" id="sc-login">
+  <div class="alo">Pre<span>activa</span></div>
+  <div class="als">Adicciones &amp; Bienestar Integral</div>
+  <div class="acd">
+    <div class="atl">Bienvenido</div>
+    <div class="asb">Inicia sesión para continuar tu proceso</div>
+    <div class="aerr" id="lerr"></div>
+    <div class="afl"><label class="alb">Correo</label><input class="ain" id="lem" type="email" placeholder="tu@correo.com"/></div>
+    <div class="afl"><label class="alb">Contraseña</label><input class="ain" id="lpw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="abtn" id="btnl" onclick="doLogin()">Ingresar</button>
+    <div class="asw">¿No tienes cuenta? <a onclick="showSc('register')">Regístrate</a></div>
   </div>
 </div>
 
-<!-- RESULTADOS -->
-<div id="sc-r" class="sc res">
-  <div class="rhead">
-    <div class="rey">Tu diagnóstico personalizado · Preactiva</div>
-    <div class="rnm" id="rnm">TU PLAN <span>PREACTIVA</span></div>
-    <div class="rint" id="rint">Basado en tus respuestas, hemos diseñado un camino a tu medida.</div>
-  </div>
-  <div class="rbody">
-    <div class="rsect"><div class="rstl">Tu situación</div><div class="rcard"><div class="dtxt" id="rdiag">Cargando...</div></div></div>
-    <div class="rsect"><div class="rstl">Plan recomendado para ti</div><div class="rcard" id="rplan">Cargando...</div></div>
-    <div class="rsect"><div class="rstl">Tu ruta terapéutica — 4 etapas</div><div id="rstages"></div></div>
-    <div class="rsect"><div class="rstl">Ejercicios prioritarios para tu caso</div><div id="rexs"></div></div>
-  </div>
-  <div class="rcta">
-    <button class="btncta" onclick="goReg()">Empezar mi proceso →</button>
-    <div class="ctanote">Al registrarte tu plan queda activo inmediatamente</div>
+<!-- REGISTER -->
+<div class="asc hidden" id="sc-register">
+  <div class="alo">Pre<span>activa</span></div>
+  <div class="als">Adicciones &amp; Bienestar Integral</div>
+  <div class="acd">
+    <div class="atl">Crear cuenta</div>
+    <div class="asb">Comienza tu proceso hoy</div>
+    <div class="aerr" id="rerr"></div>
+    <div class="aok" id="rok"></div>
+    <div class="afl"><label class="alb">Nombre</label><input class="ain" id="rnm" type="text" placeholder="Tu nombre"/></div>
+    <div class="afl"><label class="alb">Correo</label><input class="ain" id="rem" type="email" placeholder="tu@correo.com"/></div>
+    <div class="afl"><label class="alb">Contraseña</label><input class="ain" id="rpw" type="password" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter')doRegister()"/></div>
+    <button class="abtn" id="btnr" onclick="doRegister()">Crear cuenta</button>
+    <div class="asw">¿Ya tienes cuenta? <a onclick="showSc('login')">Inicia sesión</a></div>
   </div>
 </div>
 
-<!-- REGISTRO -->
-<div id="sc-reg" class="sc" style="min-height:100vh;">
-  <div class="reghead">
-    <div class="regtl">Crear mi cuenta</div>
-    <div class="regsb">Tu plan ya está listo. Solo falta activarlo.</div>
+<!-- MAIN APP -->
+<div class="app" id="mainapp" style="display:none">
+  <div class="topbar">
+    <div><img src="logo-preactiva.png" alt="Preactiva" style="height:28px;display:block;"/></div>
+    <div class="ava" id="uava" onclick="doLogout()" title="Cerrar sesión">MP</div>
   </div>
-  <div class="regbody">
-    <div class="sumbox">
-      <div class="sumlb">Tu plan seleccionado</div>
-      <div class="sumpl">Plan <span id="rpn">Básico</span></div>
-    </div>
-    <div class="rerr" id="rerr"></div>
-    <div class="rok" id="rok"></div>
-    <div class="rfl"><label class="rlb">Nombre completo</label><input class="rin" id="rnm2" type="text" placeholder="Tu nombre y apellido"/></div>
-    <div class="rfl"><label class="rlb">Teléfono / WhatsApp</label><input class="rin" id="rtel" type="tel" placeholder="+57 300 000 0000"/></div>
-    <div class="rfl"><label class="rlb">Correo electrónico</label><input class="rin" id="rem" type="email" placeholder="tu@correo.com"/></div>
-    <div class="rfl"><label class="rlb">Contraseña</label><input class="rin" id="rpw" type="password" placeholder="Mínimo 6 caracteres"/></div>
-    <button class="btncta" id="btnreg" onclick="doReg()" style="margin-top:6px">Continuar al pago →</button>
-    <div class="loglink">¿Ya tienes cuenta? <a onclick="location.href='index.html'">Ingresar aquí</a></div>
-  </div>
-</div>
+  <div class="cnt" id="cnt">
 
-<!-- PAGO -->
-<div id="sc-pay" class="sc" style="min-height:100vh;background:var(--bg1);">
-  <!-- Header -->
-  <div style="background:var(--dk);padding:20px 22px 24px;position:relative;overflow:hidden;flex-shrink:0;">
-    <div style="position:absolute;right:-20px;top:-20px;width:110px;height:110px;border-radius:50%;background:rgba(46,196,165,0.08);"></div>
-    <div style="font-size:10px;color:var(--mn);text-transform:uppercase;letter-spacing:2px;font-weight:700;margin-bottom:6px;position:relative;z-index:1;">Último paso</div>
-    <div style="font-family:var(--fh);font-size:30px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1;position:relative;z-index:1;margin-bottom:5px;">ACTIVA TU <span style="color:var(--tl);">PLAN</span></div>
-    <div style="font-size:13px;color:var(--mn);position:relative;z-index:1;">Tu cuenta ya está creada. Realiza el pago del primer mes para iniciar tu proceso.</div>
-  </div>
-  <div style="padding:18px 18px 40px;overflow-y:auto;">
+    <!-- ══════════ MI PROCESO ══════════ -->
+    <div class="sec active" id="s-proceso">
+      <p class="grt">Tu <em>proceso</em></p>
+      <p class="sub" id="procSub">Preactiva · Cuerpo · Mente · Emoción · Espíritu</p>
 
-    <!-- Plan summary -->
-    <div style="background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:16px;margin-bottom:12px;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
-        <div>
-          <div style="font-size:10px;color:var(--tl);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:3px;">Tu plan</div>
-          <div style="font-family:var(--fh);font-size:20px;font-weight:900;text-transform:uppercase;color:var(--dk);" id="pay-plan-name">Plan Básico</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:11px;color:var(--t2);text-decoration:line-through;margin-bottom:1px;" id="pay-precio-full">$1.050.000</div>
-          <div style="font-family:var(--fh);font-size:26px;font-weight:900;color:var(--tl);line-height:1;" id="pay-precio">$1.000.000</div>
-          <div style="font-size:11px;color:var(--t2);">primer mes (con bono)</div>
-        </div>
-      </div>
-      <div style="background:rgba(46,196,165,0.06);border:0.5px solid rgba(46,196,165,0.2);border-radius:var(--rmd);padding:10px 12px;">
-        <div style="font-size:12px;color:var(--t1);line-height:1.7;" id="pay-features">
-          ✓ 4 sesiones individuales / mes · 60 min c/u<br/>
-          ✓ Terapia grupal presencial · 1 vez/semana<br/>
-          ✓ Acompañamiento 24/7 vía WhatsApp<br/>
-          ✓ 1 psicoterapia familiar / mes
-        </div>
-      </div>
-    </div>
-
-    <!-- Bono badge -->
-    <div style="background:var(--am);border-radius:var(--rlg);padding:11px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
-      <div style="font-size:22px;flex-shrink:0;">🎁</div>
-      <div>
-        <div style="font-family:var(--fh);font-size:15px;font-weight:900;color:var(--dk);text-transform:uppercase;">Bono $50.000 aplicado</div>
-        <div style="font-size:11px;color:rgba(13,46,38,0.7);">Solo para el primer mes · válido hoy</div>
-      </div>
-    </div>
-
-    <!-- Wompi widget embed section -->
-    <div style="font-family:var(--fh);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--dk);opacity:0.5;margin-bottom:10px;">Pago seguro</div>
-
-    <div style="background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:16px;margin-bottom:12px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <div style="width:36px;height:36px;border-radius:var(--rmd);background:#00B1C7;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          <svg width="22" height="16" viewBox="0 0 44 28" fill="none"><rect width="44" height="28" rx="4" fill="#00B1C7"/><text x="22" y="20" text-anchor="middle" font-size="14" font-weight="900" fill="#fff" font-family="Arial,sans-serif">wompi</text></svg>
-        </div>
-        <div>
-          <div style="font-size:14px;font-weight:600;color:var(--t0);">Pago con Wompi</div>
-          <div style="font-size:11px;color:var(--t2);">Tarjeta · PSE · Nequi · Daviplata · Bancolombia</div>
-        </div>
-        <div style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:11px;color:var(--t2);">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          SSL seguro
-        </div>
+      <div class="sbanner">
+        <div class="sey" id="stEy">Etapa 0 · Valoración Integral</div>
+        <div class="snm" id="stNm">VALO<span>RACIÓN</span></div>
+        <div class="sds" id="stDs">Perfilamiento profundo, vínculo terapéutico y estrategia personalizada.</div>
+        <div class="spw"><div class="spf" id="stPr" style="width:20%"></div></div>
+        <div class="spl" id="stPl">Semana 1 de ~4 · Etapa activa</div>
       </div>
 
-      <!-- Wompi widget container — injected by JS -->
-      <div id="wompi-widget-container"></div>
-    </div>
-
-    <!-- Divider -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-      <div style="flex:1;height:0.5px;background:var(--bl);"></div>
-      <div style="font-size:11px;color:var(--t2);">o también puedes</div>
-      <div style="flex:1;height:0.5px;background:var(--bl);"></div>
-    </div>
-
-    <!-- Bancolombia Bre-B -->
-    <div style="background:var(--bg0);border:0.5px solid var(--bl);border-radius:var(--rlg);padding:14px;margin-bottom:12px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-        <div style="width:32px;height:32px;border-radius:var(--rmd);background:#FFCB05;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:900;font-size:14px;color:#003087;">B</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--t0);">Transferencia Bancolombia</div>
-          <div style="font-size:11px;color:var(--t2);">Bre-B · Llave · Cuenta de ahorros</div>
-        </div>
+      <div class="tabs" id="stabs">
+        <button class="tab on" onclick="showStage(this,'e0')">Etapa 0</button>
+        <button class="tab" onclick="showStage(this,'e1')">Etapa 1</button>
+        <button class="tab" onclick="showStage(this,'e2')">Etapa 2</button>
+        <button class="tab" onclick="showStage(this,'e3')">Etapa 3</button>
       </div>
-      <div style="background:var(--bg1);border-radius:var(--rmd);padding:10px 12px;margin-bottom:8px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:12px;">
-          <div><div style="color:var(--t2);margin-bottom:1px;">Beneficiario</div><div style="font-weight:600;color:var(--t0);">Preactiva SAS</div></div>
-          <div><div style="color:var(--t2);margin-bottom:1px;">Cuenta ahorros</div><div style="font-weight:600;color:var(--t0);">862-000045-34</div></div>
-          <div><div style="color:var(--t2);margin-bottom:1px;">Llave Bre-B</div><div style="font-weight:600;color:var(--t0);">0092388400</div></div>
-          <div><div style="color:var(--t2);margin-bottom:1px;">Valor a pagar</div><div style="font-weight:700;color:var(--tl);" id="pay-monto">$1.000.000</div></div>
-        </div>
+
+      <div id="te0">
+        <div class="addbadge" id="addbadge">✦ Plan personalizado activo</div>
+        <div class="eitem"><div class="enum">1</div><div><div class="etl">Perfilamiento del usuario</div><div class="eds">Modalidad de tratamiento y equipo profesional asignado a tu caso.</div></div></div>
+        <div class="eitem"><div class="enum">2</div><div><div class="etl">Vínculo terapéutico seguro</div><div class="eds">Construcción de confianza con tu terapeuta como base del proceso.</div></div></div>
+        <div class="eitem"><div class="enum">3</div><div><div class="etl">Evaluación profunda de la enfermedad</div><div class="eds">Análisis integral: físico, mental, emocional y espiritual.</div></div></div>
+        <div class="eitem"><div class="enum">4</div><div><div class="etl">Identificación de problemáticas asociadas</div><div class="eds">Traumas, creencias, entorno y factores que alimentan la adicción.</div></div></div>
+        <div class="eitem"><div class="enum">5</div><div><div class="etl">Estrategia terapéutica personalizada</div><div class="eds">Plan de acción diseñado a la medida de tu situación específica.</div></div></div>
       </div>
-      <a id="wa-comprobante" href="https://wa.me/573045958153" target="_blank"
-         style="display:flex;align-items:center;justify-content:center;gap:7px;background:#25D366;color:#fff;border-radius:var(--rxl);padding:11px;font-family:var(--fh);font-size:14px;font-weight:900;text-transform:uppercase;text-decoration:none;letter-spacing:0.3px;">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-        Enviar comprobante por WhatsApp
-      </a>
-    </div>
 
-    <!-- Doubts -->
-    <div style="text-align:center;padding-bottom:8px;">
-      <a href="https://wa.me/573045958153?text=Hola%20Camilo%2C%20tengo%20dudas%20sobre%20el%20pago%20de%20mi%20plan%20Preactiva."
-         target="_blank"
-         style="font-size:12px;color:var(--tl);text-decoration:none;">¿Dudas? Escríbele a Camilo →</a>
-    </div>
+      <div id="te1" style="display:none">
+        <p class="stl">Etapa 1 — Conciencia · 2 a 4 meses</p>
+        <div class="eitem"><div class="enum">1</div><div><div class="etl">Reconocimiento del ser</div><div class="eds">Creencias, carácter, valores, defectos, habilidades y manera de enfrentar la vida.</div></div></div>
+        <div class="eitem"><div class="enum">2</div><div><div class="etl">Comprender la adicción como enfermedad</div><div class="eds">Física, mental, emocional y espiritual — no es debilidad de voluntad.</div></div></div>
+        <div class="eitem"><div class="enum">3</div><div><div class="etl">Aceptar la realidad del consumo o comportamiento</div><div class="eds">Aceptación honesta sin minimizar ni exagerar.</div></div></div>
+        <div class="eitem"><div class="enum">4</div><div><div class="etl">Identificar riesgos y factores de protección</div><div class="eds">Mapa personal de situaciones de peligro y recursos de apoyo disponibles.</div></div></div>
+        <div class="eitem"><div class="enum">5</div><div><div class="etl">Evaluar compromiso con el proceso</div><div class="eds">Clarificar motivaciones profundas y establecer el contrato terapéutico.</div></div></div>
+      </div>
 
-  </div>
-</div>
+      <div id="te2" style="display:none">
+        <p class="stl">Etapa 2 — Sanación · 3 a 6 meses</p>
+        <div class="eitem"><div class="enum">1</div><div><div class="etl">Fortalecer espiritualidad o conexión interior</div><div class="eds">Reconectar con un sentido de propósito más allá de la adicción.</div></div></div>
+        <div class="eitem"><div class="enum">2</div><div><div class="etl">Descodificación generacional básica</div><div class="eds">Identificar patrones familiares que contribuyen a la adicción.</div></div></div>
+        <div class="eitem"><div class="enum">3</div><div><div class="etl">Limpieza emocional</div><div class="eds">Procesar emociones reprimidas que alimentan el comportamiento adictivo.</div></div></div>
+        <div class="eitem"><div class="enum">4</div><div><div class="etl">Humanización y tolerancia a la frustración</div><div class="eds">Capacidad de manejar el malestar sin recurrir a la adicción.</div></div></div>
+        <div class="eitem"><div class="enum">5</div><div><div class="etl">Trabajo de perdón y reparación</div><div class="eds">Sanar relaciones dañadas — consigo mismo y con los demás.</div></div></div>
+      </div>
 
-<!-- CONFIRMACIÓN -->
-<div id="sc-confirm" class="sc" style="min-height:100vh;background:var(--dk);align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
-  <div style="position:relative;z-index:1;width:100%;max-width:360px;">
-    <!-- Checkmark circle -->
-    <div style="width:72px;height:72px;border-radius:50%;background:var(--tl);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#0D4A3A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <div style="font-family:var(--fh);font-size:36px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1.05;margin-bottom:10px;">PAGO <span style="color:var(--tl);">CONFIRMADO</span></div>
-    <div style="font-size:14px;color:var(--mn);line-height:1.7;margin-bottom:28px;" id="confirm-msg">
-      Tu proceso ha comenzado. En las próximas horas recibirás un mensaje de WhatsApp con los detalles de tu primera sesión.
-    </div>
-    <!-- What's next -->
-    <div style="background:rgba(255,255,255,0.06);border:0.5px solid rgba(46,196,165,0.2);border-radius:var(--rlg);padding:16px;margin-bottom:24px;text-align:left;">
-      <div style="font-size:10px;color:var(--tl);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:10px;">¿Qué sigue?</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="width:24px;height:24px;border-radius:50%;background:var(--tl);color:var(--dk);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:12px;font-weight:900;flex-shrink:0;">1</div>
-          <div style="font-size:13px;color:var(--mn);line-height:1.5;">Tu terapeuta te contacta por WhatsApp para agendar la sesión inicial de Etapa 0.</div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="width:24px;height:24px;border-radius:50%;background:var(--tl);color:var(--dk);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:12px;font-weight:900;flex-shrink:0;">2</div>
-          <div style="font-size:13px;color:var(--mn);line-height:1.5;">Accede a la app para ver tu plan, los ejercicios terapéuticos y agendar tus sesiones virtuales.</div>
-        </div>
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="width:24px;height:24px;border-radius:50%;background:var(--tl);color:var(--dk);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:12px;font-weight:900;flex-shrink:0;">3</div>
-          <div style="font-size:13px;color:var(--mn);line-height:1.5;">Tu acompañamiento 24/7 por WhatsApp comienza hoy.</div>
+      <div id="te3" style="display:none">
+        <p class="stl">Etapa 3 — Estilo de vida · 2 a 4 meses</p>
+        <div class="eitem"><div class="enum">1</div><div><div class="etl">Resocialización con pares saludables</div><div class="eds">Construir nuevas redes de relaciones que apoyen la recuperación.</div></div></div>
+        <div class="eitem"><div class="enum">2</div><div><div class="etl">Proyecto de vida</div><div class="eds">Definir metas significativas y construir una visión de futuro concreta.</div></div></div>
+        <div class="eitem"><div class="enum">3</div><div><div class="etl">Rutinas de bienestar activas</div><div class="eds">Hábitos de sueño, movimiento, alimentación y descanso que sostienen la recuperación.</div></div></div>
+        <div class="eitem"><div class="enum">4</div><div><div class="etl">Identificación de autoengaños y caminos de recaída</div><div class="eds">Reconocer narrativas internas que abren la puerta a la recaída.</div></div></div>
+        <div class="eitem"><div class="enum">5</div><div><div class="etl">Plan de sostenimiento</div><div class="eds">Estrategia de largo plazo para mantener los logros de la recuperación.</div></div></div>
+      </div>
+
+      <p class="stl" style="margin-top:24px">Mi plan</p>
+      <div class="planinf">
+        <div class="plhdr"><span class="plnm">Plan Básico</span><span class="plpr">$1.050.000/mes</span></div>
+        <div class="plft">
+          <div class="plfi">4 sesiones individuales / mes · 60 min c/u</div>
+          <div class="plfi">Terapia grupal presencial · 1 vez/semana</div>
+          <div class="plfi">Acompañamiento 24/7 vía WhatsApp</div>
+          <div class="plfi">1 psicoterapia familiar / mes</div>
+          <div class="plfi">Plan de acción semanal con ejercicios</div>
         </div>
       </div>
     </div>
-    <button onclick="location.href='index.html'"
-      style="background:var(--tl);color:var(--dk);border:none;border-radius:var(--rxl);padding:15px;font-family:var(--fh);font-size:17px;font-weight:900;text-transform:uppercase;cursor:pointer;width:100%;letter-spacing:0.5px;">
-      Entrar a mi proceso →
+
+    <!-- ══════════ DIARIO ══════════ -->
+    <div class="sec" id="s-diario">
+      <p class="grt" style="font-size:20px">Diario de <em>recuperación</em></p>
+      <p class="sub">Privado · Solo tuyo</p>
+      <p class="stl">Registro de hoy</p>
+      <div class="card">
+        <div style="font-size:13px;color:var(--t1);margin-bottom:8px">¿Cómo te sientes ahora mismo?</div>
+        <div class="msel">
+          <button class="mopt" id="mb" onclick="selMood('b')">😌 Bien</button>
+          <button class="mopt" id="mr" onclick="selMood('r')">😐 Regular</button>
+          <button class="mopt" id="md" onclick="selMood('d')">😔 Difícil</button>
+        </div>
+        <textarea class="jtxt" id="jtxt" placeholder="¿Qué fue lo más importante de hoy? ¿Qué te resultó desafiante? ¿Qué te ayudó?"></textarea>
+        <button class="btnp" onclick="saveEntry()">Guardar entrada</button>
+      </div>
+      <p class="stl">Entradas recientes</p>
+      <div id="elist">
+        <div class="jent"><div class="jdt">Ayer</div><span class="mbadge mb-b">😌 Bien</span><div class="jtx">Fui a caminar por el parque. Manejé la ansiedad con la respiración. Me sentí más liviano.</div></div>
+        <div class="jent"><div class="jdt">Hace 2 días</div><span class="mbadge mb-r">😐 Regular</span><div class="jtx">El fin de semana siempre es más complicado. Hablé con mi terapeuta y me ayudó a ver las cosas diferente.</div></div>
+      </div>
+    </div>
+
+    <!-- ══════════ EJERCICIOS ══════════ -->
+    <div class="sec" id="s-ejercicios">
+      <div id="exlista">
+        <p class="grt" style="font-size:20px">Recursos <em>terapéuticos</em></p>
+        <p class="sub">Guiados por IA · Disponibles 24 horas</p>
+        <div class="iabd"><span class="iadot"></span> IA terapéutica activa</div>
+
+        <div class="tabs" id="ectabs">
+          <button class="tab on" onclick="showExCat(this,'universal')">Para todos</button>
+          <button class="tab" onclick="showExCat(this,'sustancias')">Sustancias</button>
+          <button class="tab" onclick="showExCat(this,'conductas')">Conductas</button>
+          <button class="tab" onclick="showExCat(this,'emocional')">Emocional</button>
+        </div>
+
+        <!-- UNIVERSAL -->
+        <div id="ec-universal">
+          <p class="stl">Ejercicio del día</p>
+          <div class="exc" style="border-color:var(--mn)">
+            <div class="exic ic-tl">🧘</div>
+            <div class="exif">
+              <div class="extg tg-tl">Mindfulness · 10 min</div>
+              <div class="exnm">Respiración 4-7-8</div>
+              <div class="exds">Inhala 4 seg, retén 7, exhala 8. Activa el sistema parasimpático para reducir el craving de inmediato.</div>
+              <button class="btnp" style="font-size:12px;padding:8px 16px" onclick="startEx('respiracion')">Comenzar con IA →</button>
+            </div>
+          </div>
+
+          <p class="stl">Etapa 0 — Valoración</p>
+          <div class="exc"><div class="exic ic-cr">🗺️</div><div class="exif"><div class="extg tg-cr">Diagnóstico</div><div class="exnm">Mapa de situaciones de riesgo</div><div class="exds">Identifica tus triggers y construye respuestas alternativas desde el inicio.</div><button class="btno" onclick="startEx('mapa')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">📊</div><div class="exif"><div class="extg tg-am">Evaluación inicial</div><div class="exnm">Inventario de mi situación actual</div><div class="exds">Radiografía honesta del impacto de la adicción en tu vida: salud, trabajo, relaciones.</div><button class="btno" onclick="startEx('inventario_situacion')">Comenzar →</button></div></div>
+
+          <p class="stl">Etapa 1 — Conciencia</p>
+          <div class="exc"><div class="exic ic-tl">🌱</div><div class="exif"><div class="extg tg-tl">Autoconocimiento</div><div class="exnm">Inventario personal</div><div class="exds">Creencias, valores, defectos y habilidades — reconócete con honestidad y compasión.</div><button class="btno" onclick="startEx('inventario')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">📝</div><div class="exif"><div class="extg tg-am">Cognitivo · 15 min</div><div class="exnm">Registro de pensamientos automáticos</div><div class="exds">Identifica y cuestiona los patrones mentales que llevan al impulso.</div><button class="btno" onclick="startEx('pensamientos')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🧠</div><div class="exif"><div class="extg tg-pu">Motivación</div><div class="exnm">Carta a mi yo futuro</div><div class="exds">Escríbete desde el lugar donde quieres estar en 1-2 años de recuperación.</div><button class="btno" onclick="startEx('carta')">Comenzar →</button></div></div>
+
+          <p class="stl">Etapa 2 — Sanación</p>
+          <div class="exc"><div class="exic ic-am">💚</div><div class="exif"><div class="extg tg-am">Emocional profundo</div><div class="exnm">Trabajo de perdón</div><div class="exds">Proceso guiado para sanar relaciones — contigo mismo y con los demás.</div><button class="btno" onclick="startEx('perdon')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🌳</div><div class="exif"><div class="extg tg-pu">Generacional</div><div class="exnm">Descodificación generacional</div><div class="exds">Explora los patrones familiares que pueden estar detrás de tu adicción.</div><button class="btno" onclick="startEx('generacional')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">✨</div><div class="exif"><div class="extg tg-tl">Espiritual</div><div class="exnm">Conexión con propósito interior</div><div class="exds">¿Para qué quieres recuperarte? Conecta con algo más grande que la adicción.</div><button class="btno" onclick="startEx('proposito')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🌿</div><div class="exif"><div class="extg tg-tl">Relajación · 8 min</div><div class="exnm">Relajación muscular progresiva</div><div class="exds">Técnica de Jacobson para liberar la tensión física acumulada por el estrés.</div><button class="btno" onclick="startEx('relajacion')">Comenzar →</button></div></div>
+
+          <p class="stl">Etapa 3 — Estilo de vida</p>
+          <div class="exc"><div class="exic ic-cr">🚀</div><div class="exif"><div class="extg tg-cr">Proyecto de vida</div><div class="exnm">Diseño de proyecto de vida</div><div class="exds">Construye una visión de futuro concreta con metas en 1, 3 y 5 años.</div><button class="btno" onclick="startEx('proyecto')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">💤</div><div class="exif"><div class="extg tg-tl">Bienestar</div><div class="exnm">Higiene del sueño</div><div class="exds">Diseña una rutina de sueño que apoye tu recuperación emocional y física.</div><button class="btno" onclick="startEx('sueno')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">🔄</div><div class="exif"><div class="extg tg-am">Prevención recaídas</div><div class="exnm">Identificación de autoengaños</div><div class="exds">Reconoce las narrativas internas y los caminos que abren la puerta a la recaída.</div><button class="btno" onclick="startEx('autoenganos')">Comenzar →</button></div></div>
+        </div>
+
+        <!-- SUSTANCIAS -->
+        <div id="ec-sustancias" style="display:none">
+
+          <div class="addhead"><div class="addhead-icon ic-am">🍺</div><div><div class="addhead-title">Alcohol</div><div class="addhead-sub">Dependencia alcohólica · todas las etapas</div></div></div>
+          <div class="exc"><div class="exic ic-tl">📊</div><div class="exif"><div class="extg tg-tl">E0 · Diagnóstico</div><div class="exnm">Diario de consumo de alcohol</div><div class="exds">Registro de frecuencia, cantidad, horarios, contextos y emociones asociadas.</div><button class="btno" onclick="startEx('diario_alcohol')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-cr">🛑</div><div class="exif"><div class="extg tg-cr">E1 · Emergencia</div><div class="exnm">Técnica HALT</div><div class="exds">¿Hambriento, Enojado, Solitario o Cansado? Identifica el estado real detrás del impulso.</div><button class="btno" onclick="startEx('halt')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">🤝</div><div class="exif"><div class="extg tg-am">E1 · Social</div><div class="exnm">Manejo de presión social</div><div class="exds">Técnicas para decir no en situaciones sociales: reuniones, celebraciones, salidas.</div><button class="btno" onclick="startEx('presion_social')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🔍</div><div class="exif"><div class="extg tg-pu">E1 · Conciencia</div><div class="exnm">¿Qué emoción evito con el alcohol?</div><div class="exds">Exploración de la función emocional que cumple el consumo en tu vida.</div><button class="btno" onclick="startEx('emoc_alcohol')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🌊</div><div class="exif"><div class="extg tg-tl">E3 · Sostenimiento</div><div class="exnm">Plan de recaída para alcohol</div><div class="exds">¿Qué haces si consumes? Plan concreto de retorno sin colapso total.</div><button class="btno" onclick="startEx('plan_recaida_alc')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-cr">💊</div><div><div class="addhead-title">Drogas / Sustancias</div><div class="addhead-sub">Cannabis, cocaína, benzodiacepinas, estimulantes</div></div></div>
+          <div class="exc"><div class="exic ic-cr">🆘</div><div class="exif"><div class="extg tg-cr">Emergencia</div><div class="exnm">Plan de crisis ante craving intenso</div><div class="exds">Protocolo de los primeros 15 minutos: respira, ubícate, llama, cambia de lugar.</div><button class="btno" onclick="startEx('craving_emergencia')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🔍</div><div class="exif"><div class="extg tg-tl">E1 · Conciencia</div><div class="exnm">Desintoxicación emocional</div><div class="exds">¿Qué emoción estás tratando de evitar o amplificar con el consumo?</div><button class="btno" onclick="startEx('detox_emocional')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">🗺️</div><div class="exif"><div class="extg tg-am">E1 · Protección</div><div class="exnm">Mapeo de entornos de riesgo</div><div class="exds">Identifica personas, lugares y momentos que activan el consumo. Diseña rutas seguras.</div><button class="btno" onclick="startEx('entornos_riesgo')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🤲</div><div class="exif"><div class="extg tg-pu">E2 · Sanación</div><div class="exnm">Duelo por el consumo</div><div class="exds">El proceso de dejar algo que sentías que te ayudaba implica un duelo real. Acompañamos ese proceso.</div><button class="btno" onclick="startEx('duelo_consumo')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-am">🚬</div><div><div class="addhead-title">Tabaco / Nicotina</div><div class="addhead-sub">Cigarrillo, vapeador, nicotina</div></div></div>
+          <div class="exc"><div class="exic ic-am">⏱️</div><div class="exif"><div class="extg tg-am">E1 · Control</div><div class="exnm">Técnica de los 5 minutos</div><div class="exds">El craving de nicotina dura solo 5 minutos. Acompañamos esa ola hasta que pase.</div><button class="btno" onclick="startEx('cinco_minutos')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🔄</div><div class="exif"><div class="extg tg-tl">E1 · Hábito</div><div class="exnm">Sustitución del hábito del cigarro</div><div class="exds">Identifica el detonante, la rutina y la recompensa. Diseña un sustituto saludable.</div><button class="btno" onclick="startEx('sustitucion')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-cr">📝</div><div class="exif"><div class="extg tg-cr">E0 · Registro</div><div class="exnm">Diario de consumo de nicotina</div><div class="exds">¿Cuántos cigarros al día? ¿En qué momentos? ¿Con qué emoción? Mapeo sin juzgar.</div><button class="btno" onclick="startEx('diario_tabaco')">Comenzar →</button></div></div>
+        </div>
+
+        <!-- CONDUCTAS -->
+        <div id="ec-conductas" style="display:none">
+
+          <div class="addhead"><div class="addhead-icon ic-cr">🎰</div><div><div class="addhead-title">Ludopatía</div><div class="addhead-sub">Apuestas, juegos de azar, casino, deportivas</div></div></div>
+          <div class="exc"><div class="exic ic-cr">💸</div><div class="exif"><div class="extg tg-cr">E0 · Diagnóstico</div><div class="exnm">Inventario financiero</div><div class="exds">Evaluación honesta del impacto económico: deudas, pérdidas, préstamos. Sin juzgar.</div><button class="btno" onclick="startEx('inventario_financiero')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">⚡</div><div class="exif"><div class="extg tg-am">E1 · Impulsos</div><div class="exnm">Ciclo del impulso de jugar</div><div class="exds">¿Qué lo activa? ¿Qué sientes antes, durante y después? Conciencia del ciclo.</div><button class="btno" onclick="startEx('impulso_juego')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🔒</div><div class="exif"><div class="extg tg-tl">E1 · Control</div><div class="exnm">Plan de límites de acceso</div><div class="exds">Diseño de barreras concretas: bloqueos, aliados, horarios, cantidades máximas.</div><button class="btno" onclick="startEx('limites_juego')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🧩</div><div class="exif"><div class="extg tg-pu">E2 · Emocional</div><div class="exnm">¿Qué llena el vacío del juego?</div><div class="exds">La ludopatía llena un vacío emocional. ¿Cuál es el tuyo? Exploramos juntos.</div><button class="btno" onclick="startEx('vacio_juego')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-tl">📱</div><div><div class="addhead-title">Ciberadicción</div><div class="addhead-sub">Redes sociales, videojuegos, pornografía online, compras online</div></div></div>
+          <div class="exc"><div class="exic ic-tl">📱</div><div class="exif"><div class="extg tg-tl">E0 · Diagnóstico</div><div class="exnm">Auditoría de tiempo en pantalla</div><div class="exds">¿Cuántas horas diarias? ¿Qué plataformas? ¿Qué emociones buscas online?</div><button class="btno" onclick="startEx('auditoria_pantalla')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🌿</div><div class="exif"><div class="extg tg-pu">E1 · Desconexión</div><div class="exnm">Rutina de desconexión digital</div><div class="exds">Horarios sin pantallas, actividades presenciales de sustitución, límites en apps.</div><button class="btno" onclick="startEx('desconexion')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">🧍</div><div class="exif"><div class="extg tg-am">E2 · Identidad</div><div class="exnm">¿Quién soy fuera de la pantalla?</div><div class="exds">Reconstruye una identidad y presencia en el mundo físico y relacional.</div><button class="btno" onclick="startEx('identidad_digital')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-cr">🔗</div><div><div class="addhead-title">Codependencia</div><div class="addhead-sub">Relaciones de dependencia emocional</div></div></div>
+          <div class="exc"><div class="exic ic-cr">🔗</div><div class="exif"><div class="extg tg-cr">E1 · Límites</div><div class="exnm">Trabajo de límites emocionales</div><div class="exds">¿Qué es un límite? ¿Dónde no tienes? ¿Qué sientes cuando alguien los cruza?</div><button class="btno" onclick="startEx('limites')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🪞</div><div class="exif"><div class="extg tg-tl">E2 · Identidad</div><div class="exnm">Construcción de identidad propia</div><div class="exds">¿Quién eres más allá de la relación? ¿Qué quieres tú, para ti?</div><button class="btno" onclick="startEx('identidad')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">💬</div><div class="exif"><div class="extg tg-am">E1 · Comunicación</div><div class="exnm">Comunicación asertiva</div><div class="exds">Di lo que necesitas sin manipular ni ceder totalmente. Práctica con escenarios reales.</div><button class="btno" onclick="startEx('asertividad')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-am">💼</div><div><div class="addhead-title">Workaholic</div><div class="addhead-sub">Adicción al trabajo y productividad</div></div></div>
+          <div class="exc"><div class="exic ic-am">⚖️</div><div class="exif"><div class="extg tg-am">E1 · Equilibrio</div><div class="exnm">Límites laborales y de vida</div><div class="exds">¿Qué parte de tu identidad estás poniendo en el trabajo? ¿Qué evitas cuando paras?</div><button class="btno" onclick="startEx('limites_trabajo')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">🧘</div><div class="exif"><div class="extg tg-pu">E2 · Descanso</div><div class="exnm">Aprendiendo a descansar sin culpa</div><div class="exds">El descanso no es improductividad. Exploración de la culpa detrás del ocio.</div><button class="btno" onclick="startEx('descanso_culpa')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-tl">💪</div><div><div class="addhead-title">Vigorexia</div><div class="addhead-sub">Adicción al ejercicio y cuerpo</div></div></div>
+          <div class="exc"><div class="exic ic-tl">🪞</div><div class="exif"><div class="extg tg-tl">E1 · Imagen</div><div class="exnm">Relación sana con el cuerpo</div><div class="exds">¿Qué sientes cuando no puedes entrenar? Exploración del control y la imagen corporal.</div><button class="btno" onclick="startEx('imagen_corporal')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">📋</div><div class="exif"><div class="extg tg-am">E0 · Registro</div><div class="exnm">Registro de hábitos de ejercicio</div><div class="exds">Frecuencia, duración, emociones antes y después. Observación sin juzgar.</div><button class="btno" onclick="startEx('registro_ejercicio')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-pu">🛍️</div><div><div class="addhead-title">Oniomanía</div><div class="addhead-sub">Adicción a las compras</div></div></div>
+          <div class="exc"><div class="exic ic-pu">⏸️</div><div class="exif"><div class="extg tg-pu">E1 · Control</div><div class="exnm">Técnica de pausa de 48 horas</div><div class="exds">Antes de comprar el impulso, espera 48 horas. Acompañamos esa espera contigo.</div><button class="btno" onclick="startEx('pausa48')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">💳</div><div class="exif"><div class="extg tg-am">E0 · Diagnóstico</div><div class="exnm">Inventario de compras impulsivas</div><div class="exds">¿Qué compras, cuándo, qué sientes antes y después? Mapa del comportamiento.</div><button class="btno" onclick="startEx('inventario_compras')">Comenzar →</button></div></div>
+        </div>
+
+        <!-- EMOCIONAL -->
+        <div id="ec-emocional" style="display:none">
+
+          <div class="addhead"><div class="addhead-icon ic-am">😰</div><div><div class="addhead-title">Ansiedad y estrés</div><div class="addhead-sub">Trastorno de ansiedad, estrés crónico, pánico</div></div></div>
+          <div class="exc"><div class="exic ic-tl">🌊</div><div class="exif"><div class="extg tg-tl">Emergencia · Grounding</div><div class="exnm">Técnica 5-4-3-2-1</div><div class="exds">5 ves, 4 tocas, 3 oyes, 2 hueles, 1 saboreas. Anclaje al presente en segundos.</div><button class="btno" onclick="startEx('grounding')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">🧩</div><div class="exif"><div class="extg tg-am">E1 · Cognitivo</div><div class="exnm">Reestructuración cognitiva</div><div class="exds">Identifica el pensamiento ansioso, evalúa su veracidad y construye alternativas realistas.</div><button class="btno" onclick="startEx('reestructuracion')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-pu">📉</div><div class="exif"><div class="extg tg-pu">E1 · Regulación</div><div class="exnm">Curva del craving y la ansiedad</div><div class="exds">La ansiedad sube, llega a un pico y baja. Aprende a aguantarla sin actuar el impulso.</div><button class="btno" onclick="startEx('curva_craving')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-tl">🌧️</div><div><div class="addhead-title">Depresión</div><div class="addhead-sub">Depresión mayor, distimia, estado depresivo</div></div></div>
+          <div class="exc"><div class="exic ic-tl">☀️</div><div class="exif"><div class="extg tg-tl">E1 · Activación</div><div class="exnm">Activación conductual gradual</div><div class="exds">Una pequeña actividad placentera para hoy. La inactividad alimenta la depresión.</div><button class="btno" onclick="startEx('activacion')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-am">😶</div><div class="exif"><div class="extg tg-am">E1 · Emocional</div><div class="exnm">Registro y validación emocional</div><div class="exds">¿Qué sientes hoy? Nombrar y validar las emociones sin combatirlas.</div><button class="btno" onclick="startEx('validacion_emocional')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-am">🍽️</div><div><div class="addhead-title">Trastornos alimentarios</div><div class="addhead-sub">Anorexia, bulimia, atracón, restricción</div></div></div>
+          <div class="exc"><div class="exic ic-am">🍽️</div><div class="exif"><div class="extg tg-am">E1 · Conciencia</div><div class="exnm">Alimentación consciente</div><div class="exds">¿Comes por hambre real o emocional? Exploración sin dietas ni juicios sobre el cuerpo.</div><button class="btno" onclick="startEx('alimentacion')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-tl">🪞</div><div class="exif"><div class="extg tg-tl">E2 · Imagen</div><div class="exnm">Relación con el cuerpo y la comida</div><div class="exds">Historia de tu relación con la comida y el cuerpo. Trabajo suave y compasivo.</div><button class="btno" onclick="startEx('relacion_cuerpo')">Comenzar →</button></div></div>
+
+          <div class="addhead"><div class="addhead-icon ic-pu">🌡️</div><div><div class="addhead-title">Trauma y TEPT</div><div class="addhead-sub">Trauma como base de la adicción</div></div></div>
+          <div class="exc"><div class="exic ic-pu">🛡️</div><div class="exif"><div class="extg tg-pu">E2 · Trauma</div><div class="exnm">Construcción de lugar seguro interior</div><div class="exds">Técnica de visualización para crear un espacio mental de calma y seguridad.</div><button class="btno" onclick="startEx('lugar_seguro')">Comenzar →</button></div></div>
+          <div class="exc"><div class="exic ic-cr">🤝</div><div class="exif"><div class="extg tg-cr">E1 · Conciencia</div><div class="exnm">Trauma y adicción: la conexión</div><div class="exds">Comprende cómo el trauma no procesado puede estar en la raíz de tu adicción.</div><button class="btno" onclick="startEx('trauma_adiccion')">Comenzar →</button></div></div>
+        </div>
+
+      </div><!-- end exlista -->
+
+      <!-- AI EXERCISE PANEL -->
+      <div id="expanel" style="display:none">
+        <button class="backbtn" onclick="closeEx()">← Volver a ejercicios</button>
+        <div class="aipanel">
+          <div class="aiph">
+            <span class="aiptl" id="exptl">Ejercicio</span>
+            <span class="aibadge">IA activa</span>
+          </div>
+          <div class="aimsgs" id="aimsgs"></div>
+          <div class="aiinr">
+            <input class="aiin" id="aiin" placeholder="Escribe tu respuesta..." onkeydown="if(event.key==='Enter'&&!aiT)sendAI()"/>
+            <button class="sndbtn" id="sndbtn" onclick="sendAI()">&#10148;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ TERAPEUTA ══════════ -->
+    <div class="sec" id="s-terapeuta">
+      <p class="grt" style="font-size:20px">Mi <em>terapeuta</em></p>
+      <p class="sub">Comunicación segura y confidencial</p>
+      <div class="terinf">
+        <div class="terav">LC</div>
+        <div><div class="ternm">Lic. Laura Cardona</div><div class="terst"><span class="ondot"></span> Disponible · Próxima sesión: miérc. 7 mayo</div></div>
+      </div>
+      <p class="stl">Mensajes</p>
+      <div class="chatarea" id="chatmsgs">
+        <div class="msg"><div class="mav av-tr">LC</div><div><div class="mbbl mb-th">Hola, ¿cómo vas con el ejercicio de respiración? Recuerda usarlo cuando sientas el impulso.</div><div class="mtime">Ayer, 4:12 pm</div></div></div>
+        <div class="msg me"><div class="mav av-me">MP</div><div><div class="mbbl mb-me">Lo usé ayer con la ansiedad. Funcionó bastante bien.</div><div class="mtime">Ayer, 5:47 pm</div></div></div>
+        <div class="msg"><div class="mav av-tr">LC</div><div><div class="mbbl mb-th">¡Muy bien! En la sesión del miércoles profundizamos en eso. 💪</div><div class="mtime">Ayer, 6:02 pm</div></div></div>
+      </div>
+      <div class="chatinr">
+        <input class="chatin" id="chatin" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="sndbtn" onclick="sendMsg()">&#10148;</button>
+      </div>
+    </div>
+
+    <!-- ══════════ COMUNIDAD ══════════ -->
+    <div class="sec" id="s-comunidad">
+      <p class="grt" style="font-size:20px">Comunidad de <em>apoyo</em></p>
+      <p class="sub">Anónimo y seguro · Personas en el mismo camino</p>
+      <div class="nparea">
+        <textarea class="npinp" id="npinp" placeholder="Comparte algo con la comunidad de forma anónima..."></textarea>
+        <div class="npft"><button class="btnp" style="font-size:12px;padding:8px 16px" onclick="pubPost()">Publicar anónimamente</button></div>
+      </div>
+      <div id="plist">
+        <div class="pcard"><div class="phdr"><div class="pav" style="background:var(--lt);color:var(--dk)">A7</div><div><div class="pnm">Anónimo #7</div><div class="pago">Hace 2 horas</div></div></div><div class="ptxt">Hoy cumplí 3 meses. No pensé que llegaría aquí. La constancia y este espacio me han ayudado mucho.</div><button class="pact" onclick="likeP(this)">♡ 14 apoyos</button></div>
+        <div class="pcard"><div class="phdr"><div class="pav" style="background:rgba(46,196,165,0.1);color:var(--tl)">M2</div><div><div class="pnm">Anónimo #2</div><div class="pago">Hace 5 horas</div></div></div><div class="ptxt">¿Alguien más siente que los fines de semana son los más difíciles? Me ayuda leer experiencias de otros.</div><button class="pact" onclick="likeP(this)">♡ 9 apoyos</button></div>
+        <div class="pcard"><div class="phdr"><div class="pav" style="background:rgba(232,100,58,0.08);color:var(--cr)">K5</div><div><div class="pnm">Anónimo #5</div><div class="pago">Ayer</div></div></div><div class="ptxt">El mapa de riesgos me cambió la perspectiva. Antes reaccionaba, ahora veo los triggers antes de que lleguen.</div><button class="pact" onclick="likeP(this)">♡ 22 apoyos</button></div>
+        <div class="pcard"><div class="phdr"><div class="pav" style="background:rgba(127,119,221,0.1);color:var(--pu)">R1</div><div><div class="pnm">Anónimo #1</div><div class="pago">Hace 3 días</div></div></div><div class="ptxt">La codependencia es tan silenciosa. Creía que ayudar a todos era algo bueno, pero en el fondo era yo quien no sabía estar solo/a.</div><button class="pact" onclick="likeP(this)">♡ 31 apoyos</button></div>
+      </div>
+    </div>
+
+    <!-- AGENDA -->
+    <div class="sec" id="s-agenda">
+      <p class="grt" style="font-size:20px">Mis <em>sesiones</em></p>
+      <p class="sub" id="agenda-sub">Agenda tu próxima sesión virtual</p>
+
+      <!-- Plan summary -->
+      <div class="sbanner" style="margin-bottom:16px">
+        <div class="sey">Tu plan activo</div>
+        <div class="snm" style="font-size:22px" id="agn-plan">PLAN <span>BÁSICO</span></div>
+        <div class="sds" id="agn-sesiones">4 sesiones individuales al mes · 60 min c/u</div>
+        <div style="display:flex;gap:8px;position:relative;z-index:1;flex-wrap:wrap;">
+          <div style="background:rgba(46,196,165,0.15);border:1px solid rgba(46,196,165,0.3);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--mn);font-weight:600;" id="agn-usadas">Usadas este mes: 1 / 4</div>
+          <div style="background:rgba(46,196,165,0.15);border:1px solid rgba(46,196,165,0.3);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--mn);font-weight:600;">Próxima disponible: hoy</div>
+        </div>
+      </div>
+
+      <!-- Upcoming sessions -->
+      <p class="stl">Sesiones agendadas</p>
+      <div id="agn-list">
+        <div class="card" style="border-left:3px solid var(--tl);border-radius:0 var(--rlg) var(--rlg) 0;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;">
+            <div>
+              <div style="font-size:11px;color:var(--tl);text-transform:uppercase;letter-spacing:1px;font-family:var(--fh);font-weight:700;margin-bottom:3px;">Próxima sesión</div>
+              <div style="font-size:15px;font-weight:600;color:var(--t0);">Miércoles 7 de mayo</div>
+              <div style="font-size:13px;color:var(--t1);">4:00 PM — 5:00 PM · Individual con terapeuta</div>
+            </div>
+            <div style="background:var(--lt);color:var(--dk);border:0.5px solid var(--mn);border-radius:10px;padding:3px 10px;font-size:11px;font-weight:700;white-space:nowrap;">Confirmada</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t1);margin-bottom:10px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--lt);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--dk);flex-shrink:0;">LC</div>
+            Lic. Laura Cardona · Terapeuta
+          </div>
+          <a id="zoom-link-1" href="https://zoom.us" target="_blank" style="display:flex;align-items:center;gap:8px;background:var(--dk);color:var(--tl);border-radius:var(--rmd);padding:10px 14px;text-decoration:none;font-size:13px;font-weight:600;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14"/><rect x="3" y="6" width="12" height="12" rx="2"/></svg>
+            Unirse a la videollamada
+          </a>
+        </div>
+      </div>
+
+      <!-- New session booking -->
+      <p class="stl" style="margin-top:22px">Agendar nueva sesión</p>
+      <div class="card">
+        <div style="font-size:13px;color:var(--t1);margin-bottom:14px;line-height:1.5;">Selecciona el tipo de sesión, día y hora disponible. Recibirás la confirmación y el enlace de videollamada por correo y WhatsApp.</div>
+
+        <div style="margin-bottom:14px;">
+          <div class="stl" style="margin-top:0;margin-bottom:8px;">Tipo de sesión</div>
+          <div style="display:flex;flex-direction:column;gap:8px;" id="tipo-sesion-opts">
+            <div class="agn-tipo sel-tipo" data-tipo="terapeuta" onclick="selTipo(this)" style="background:rgba(46,196,165,0.12);border:1.5px solid var(--tl);border-radius:var(--rmd);padding:12px 14px;cursor:pointer;">
+              <div style="font-size:13px;font-weight:600;color:var(--t0);">Sesión individual con terapeuta</div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px;">60 min · Incluida en todos los planes</div>
+            </div>
+            <div class="agn-tipo" data-tipo="psicologo" onclick="selTipo(this)" style="background:rgba(255,255,255,0.07);border:1.5px solid var(--bl);border-radius:var(--rmd);padding:12px 14px;cursor:pointer;">
+              <div style="font-size:13px;font-weight:600;color:var(--t0);">Sesión con psicólogo clínico</div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px;">60 min · Solo Plan Intensivo</div>
+            </div>
+            <div class="agn-tipo" data-tipo="familiar" onclick="selTipo(this)" style="background:rgba(255,255,255,0.07);border:1.5px solid var(--bl);border-radius:var(--rmd);padding:12px 14px;cursor:pointer;">
+              <div style="font-size:13px;font-weight:600;color:var(--t0);">Psicoterapia familiar</div>
+              <div style="font-size:11px;color:var(--t2);margin-top:2px;">60 min · 1 sesión mensual incluida</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div class="stl" style="margin-top:0;margin-bottom:8px;">Semana disponible</div>
+          <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;" id="agn-dias">
+            <!-- Days rendered by JS -->
+          </div>
+        </div>
+
+        <div id="agn-horas-wrap" style="margin-bottom:16px;display:none;">
+          <div class="stl" style="margin-top:0;margin-bottom:8px;">Hora disponible</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;" id="agn-horas"></div>
+        </div>
+
+        <div id="agn-confirmacion" style="display:none;background:var(--lt);border:1px solid var(--mn);border-radius:var(--rmd);padding:12px;margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:700;color:var(--dk);margin-bottom:4px;">Tu selección</div>
+          <div style="font-size:13px;color:var(--t1);" id="agn-resumen">—</div>
+        </div>
+
+        <button class="btnp" id="btn-agendar" onclick="confirmarAgenda()" style="width:100%;opacity:0.4;cursor:not-allowed;" disabled>Confirmar sesión</button>
+      </div>
+
+      <!-- Past sessions -->
+      <p class="stl" style="margin-top:22px">Historial de sesiones</p>
+      <div class="card" style="opacity:0.7;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;color:var(--t0);">30 de abril · Individual</span><span style="font-size:11px;background:var(--bg1);border-radius:8px;padding:2px 8px;color:var(--t1);">Completada</span></div>
+        <div style="font-size:12px;color:var(--t2);">Lic. Laura Cardona · 60 min</div>
+      </div>
+      <div class="card" style="opacity:0.7;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;color:var(--t0);">23 de abril · Individual</span><span style="font-size:11px;background:var(--bg1);border-radius:8px;padding:2px 8px;color:var(--t1);">Completada</span></div>
+        <div style="font-size:12px;color:var(--t2);">Lic. Laura Cardona · 60 min</div>
+      </div>
+    </div>
+
+  </div><!-- end cnt -->
+
+  <nav class="navbar">
+    <button class="ni on" id="n-proceso" onclick="nav('proceso')">
+      <svg class="nsvg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <span class="nlb">Proceso</span>
     </button>
-    <div style="margin-top:14px;font-size:12px;color:var(--t2);">
-      ID de transacción: <span id="confirm-txid" style="font-family:monospace;">—</span>
-    </div>
-  </div>
-</div>
-
+    <button class="ni" id="n-diario" onclick="nav('diario')">
+      <svg class="nsvg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span class="nlb">Diario</span>
+    </button>
+    <button class="ni" id="n-ejercicios" onclick="nav('ejercicios')">
+      <svg class="nsvg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span class="nlb">Ejercicios</span>
+    </button>
+    <button class="ni" id="n-terapeuta" onclick="nav('terapeuta')">
+      <svg class="nsvg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span class="nlb">Terapeuta</span>
+    </button>
+    <button class="ni" id="n-comunidad" onclick="nav('comunidad')">
+      <svg class="nsvg" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <span class="nlb">Comunidad</span>
+    </button>
+    <button class="ni" id="n-agenda" onclick="nav('agenda');initAgenda()">
+      <svg class="nsvg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span class="nlb">Agenda</span>
+    </button>
+  </nav>
 </div>
 
 <script>
-var SB = supabase.createClient(
-  'https://uutbpzcxihcsbmcrgjxx.supabase.co',
-  'sb_publishable_EmOxCGvSNLHbdIzMuXYfIA_CpOcEexi'
-);
+const SB=supabase.createClient('https://uutbpzcxihcsbmcrgjxx.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1dGJwemN4aWhjc2JtY3Jnanh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4NDE5NzUsImV4cCI6MjA5MzQxNzk3NX0.QJoLFdBkj8p9OVWh9keyL61h748H6VraUJ3zrZDc5IE');
+let CU=null;
 
-var ans = {}, cq = 0, selPlan = 'Básico', aiDx = '';
-
-var Q = [
-  {id:'tipo',blk:'BLOQUE 1 · TU SITUACIÓN',txt:'¿Con qué situación te identificas <span>principalmente?</span>',sub:'Selecciona la que más te representa hoy.',tp:'single',opts:[
-    {i:'🍺',l:'Alcohol',s:'Consumo problemático o dependencia'},
-    {i:'💊',l:'Drogas / sustancias',s:'Cannabis, cocaína, benzodiacepinas u otras'},
-    {i:'🚬',l:'Tabaco / nicotina',s:'Cigarrillo, vapeador, nicotina'},
-    {i:'🎰',l:'Ludopatía',s:'Apuestas, juegos de azar'},
-    {i:'📱',l:'Ciberadicción',s:'Redes, videojuegos, pornografía online'},
-    {i:'🔗',l:'Codependencia',s:'Dependencia emocional en relaciones'},
-    {i:'💼',l:'Workaholic / vigorexia / compras',s:'Adicciones de conducta'},
-    {i:'😰',l:'Ansiedad / depresión',s:'Salud mental como base'}
-  ]},
-  {id:'extra',blk:'BLOQUE 1 · TU SITUACIÓN',txt:'¿Tienes otras <span>situaciones asociadas?</span>',sub:'Puedes seleccionar varias. Es muy común.',tp:'multi',opts:[
-    {i:'😰',l:'Ansiedad o estrés crónico'},
-    {i:'🌧️',l:'Depresión o bajo estado de ánimo'},
-    {i:'😴',l:'Problemas de sueño'},
-    {i:'💸',l:'Problemas financieros por la adicción'},
-    {i:'👨‍👩‍👧',l:'Conflictos familiares'},
-    {i:'❌',l:'Ninguna adicional'}
-  ]},
-  {id:'tiempo',blk:'BLOQUE 1 · TU SITUACIÓN',txt:'¿Hace cuánto tiempo <span>convives con esto?</span>',sub:'Aproximadamente.',tp:'single',opts:[
-    {i:'📅',l:'Menos de 6 meses'},
-    {i:'📅',l:'Entre 6 meses y 2 años'},
-    {i:'📅',l:'Entre 2 y 5 años'},
-    {i:'📅',l:'Más de 5 años'}
-  ]},
-  {id:'intentos',blk:'BLOQUE 2 · TU HISTORIA',txt:'¿Has intentado <span>dejarlo o controlarlo</span> antes?',sub:'No hay respuesta incorrecta.',tp:'single',opts:[
-    {i:'1️⃣',l:'Nunca lo he intentado'},
-    {i:'2️⃣',l:'Sí, 1 o 2 veces sin método'},
-    {i:'3️⃣',l:'Sí, varias veces con recaídas'},
-    {i:'4️⃣',l:'Tuve períodos largos sin, pero volví'}
-  ]},
-  {id:'tratamiento',blk:'BLOQUE 2 · TU HISTORIA',txt:'¿Has recibido <span>tratamiento</span> antes?',sub:'Cualquier tipo de ayuda profesional.',tp:'single',opts:[
-    {i:'❌',l:'No, nunca'},
-    {i:'🗣️',l:'Solo psicología o consejería'},
-    {i:'💊',l:'Psiquiatría o medicación'},
-    {i:'🏥',l:'Internamiento o rehabilitación'},
-    {i:'👥',l:'Grupos de apoyo (NA, AA, etc.)'}
-  ]},
-  {id:'imp_salud',blk:'BLOQUE 3 · IMPACTO EN TU VIDA',txt:'¿Cómo ha afectado tu <span>salud física?</span>',sub:'1 = sin impacto · 10 = impacto muy alto',tp:'scale'},
-  {id:'imp_trabajo',blk:'BLOQUE 3 · IMPACTO EN TU VIDA',txt:'¿Cómo ha afectado tu <span>trabajo o estudio?</span>',sub:'1 = sin impacto · 10 = impacto muy alto',tp:'scale'},
-  {id:'imp_familia',blk:'BLOQUE 3 · IMPACTO EN TU VIDA',txt:'¿Cómo ha afectado tus <span>relaciones familiares?</span>',sub:'1 = sin impacto · 10 = impacto muy alto',tp:'scale'},
-  {id:'imp_dinero',blk:'BLOQUE 3 · IMPACTO EN TU VIDA',txt:'¿Cómo ha afectado tu <span>economía?</span>',sub:'1 = sin impacto · 10 = impacto muy alto',tp:'scale'},
-  {id:'motivacion',blk:'BLOQUE 4 · TU MOTIVACIÓN',txt:'¿Qué te motiva a <span>buscar ayuda ahora?</span>',sub:'Selecciona la más importante.',tp:'single',opts:[
-    {i:'👨‍👩‍👧',l:'Mi familia o pareja'},
-    {i:'💼',l:'Mi trabajo o carrera'},
-    {i:'❤️',l:'Mi salud y bienestar'},
-    {i:'💸',l:'Mis finanzas'},
-    {i:'✨',l:'Quiero ser mejor persona'},
-    {i:'🌱',l:'Ya no quiero más esto'}
-  ]},
-  {id:'disposicion',blk:'BLOQUE 4 · TU MOTIVACIÓN',txt:'¿Qué tan <span>dispuesto/a estás</span> ahora mismo?',sub:'1 = no estoy seguro · 10 = totalmente comprometido',tp:'scale'},
-  {id:'emociones',blk:'BLOQUE 4 · TU MOTIVACIÓN',txt:'¿Cómo te sientes <span>emocionalmente hoy?</span>',sub:'Puedes seleccionar varias.',tp:'multi',opts:[
-    {i:'😰',l:'Ansioso / nervioso'},
-    {i:'😔',l:'Triste o deprimido'},
-    {i:'😡',l:'Frustrado o enojado'},
-    {i:'😤',l:'Cansado de esta situación'},
-    {i:'💪',l:'Listo para cambiar'},
-    {i:'😐',l:'Sin energía o indiferente'}
-  ]},
-  {id:'triggers',blk:'BLOQUE 5 · TUS PATRONES',txt:'¿Qué <span>situaciones</span> activan más el impulso?',sub:'Selecciona las que más aplican.',tp:'multi',opts:[
-    {i:'😓',l:'Estrés laboral o financiero'},
-    {i:'💔',l:'Problemas de pareja o familia'},
-    {i:'😞',l:'Soledad o aburrimiento'},
-    {i:'🎉',l:'Situaciones sociales'},
-    {i:'🌙',l:'Las noches o fines de semana'},
-    {i:'😡',l:'Emociones negativas intensas'},
-    {i:'💊',l:'Síntomas de abstinencia'}
-  ]},
-  {id:'apoyo',blk:'BLOQUE 5 · TUS PATRONES',txt:'¿Tienes <span>red de apoyo</span> cercana?',sub:'Personas que sepan de tu situación.',tp:'single',opts:[
-    {i:'👍',l:'Sí, mi familia me apoya'},
-    {i:'🤝',l:'Solo algunas personas cercanas'},
-    {i:'🤫',l:'Nadie sabe, lo manejo solo/a'},
-    {i:'❌',l:'No tengo apoyo cercano'}
-  ]},
-  {id:'edad',blk:'BLOQUE 6 · TU PERFIL',txt:'¿Cuál es tu <span>rango de edad?</span>',sub:'Para personalizar mejor el plan.',tp:'single',opts:[
-    {i:'🧑',l:'18 a 25 años'},
-    {i:'👨',l:'26 a 35 años'},
-    {i:'👨‍💼',l:'36 a 45 años'},
-    {i:'🧔',l:'46 a 55 años'},
-    {i:'👴',l:'56 años o más'}
-  ]},
-  {id:'genero',blk:'BLOQUE 6 · TU PERFIL',txt:'¿Con qué género <span>te identificas?</span>',sub:'Opcional.',tp:'single',opts:[
-    {i:'♂️',l:'Masculino'},
-    {i:'♀️',l:'Femenino'},
-    {i:'⚧',l:'No binario / otro'},
-    {i:'⬜',l:'Prefiero no decir'}
-  ]},
-  {id:'rol',blk:'BLOQUE 6 · TU PERFIL',txt:'¿Cuál es tu <span>situación laboral?</span>',sub:'Para orientar el plan según tu realidad.',tp:'single',opts:[
-    {i:'💼',l:'Empresario / directivo',s:'Tengo empresa o posición de liderazgo'},
-    {i:'👔',l:'Empleado/a'},
-    {i:'🎓',l:'Estudiante'},
-    {i:'🏠',l:'Ama/o de casa'},
-    {i:'🔄',l:'En transición laboral'}
-  ]},
-  {id:'rutina',blk:'BLOQUE 6 · TU PERFIL',txt:'¿Cómo describes tu <span>rutina diaria?</span>',tp:'single',opts:[
-    {i:'🏃',l:'Muy activa y ocupada'},
-    {i:'⚖️',l:'Moderada con tiempo libre'},
-    {i:'🛋️',l:'Tranquila o con poca estructura'},
-    {i:'🌀',l:'Irregular o impredecible'}
-  ]},
-  {id:'disponibilidad',blk:'BLOQUE 7 · TU PLAN',txt:'¿Cuánto tiempo semanal puedes dedicar a tu <span>proceso?</span>',tp:'single',opts:[
-    {i:'⏱️',l:'2 a 3 horas por semana'},
-    {i:'⏰',l:'4 a 6 horas por semana'},
-    {i:'🕐',l:'7 a 10 horas por semana'},
-    {i:'🕑',l:'Más de 10 horas por semana'}
-  ]},
-  {id:'estado',blk:'BLOQUE 7 · TU PLAN',txt:'¿Cómo llegas <span>hoy</span> a este proceso?',sub:'Sé honesto/a — es confidencial.',tp:'single',opts:[
-    {i:'🆘',l:'En crisis, necesito ayuda urgente'},
-    {i:'😟',l:'Muy afectado/a, quiero cambiar ya'},
-    {i:'🤔',l:'Evaluando si es el momento'},
-    {i:'💪',l:'Listo/a y motivado/a para comenzar'}
-  ]}
-];
-
-function showSc(id) {
-  var screens = ['sc-w','sc-q','sc-g','sc-r','sc-reg','sc-pay','sc-confirm'];
-  screens.forEach(function(s) {
-    var el = document.getElementById(s);
-    el.classList.remove('active');
-    el.style.display = 'none';
+async function initAuth(){
+  const {data:{session}}=await SB.auth.getSession();
+  if(session){CU=session.user;showApp();}else showSc('login');
+  SB.auth.onAuthStateChange((ev,ses)=>{
+    if(ev==='SIGNED_IN'&&ses){CU=ses.user;showApp();}
+    else if(ev==='SIGNED_OUT'){CU=null;showSc('login');}
   });
-  var target = document.getElementById(id);
-  target.style.display = 'flex';
-  requestAnimationFrame(function() { target.classList.add('active'); });
-  window.scrollTo(0, 0);
 }
-
-function startQuiz() {
-  cq = 0;
-  showSc('sc-q');
-  renderQ();
+function showSc(n){
+  document.getElementById('sc-login').classList.add('hidden');
+  document.getElementById('sc-register').classList.add('hidden');
+  document.getElementById('mainapp').style.display='none';
+  if(n==='login')document.getElementById('sc-login').classList.remove('hidden');
+  else document.getElementById('sc-register').classList.remove('hidden');
 }
-
-function goBack() {
-  if (cq === 0) { showSc('sc-w'); return; }
-  cq--;
-  renderQ();
-}
-
-function mk(tag, cls, txt) {
-  var e = document.createElement(tag);
-  if (cls) e.className = cls;
-  if (txt !== undefined) e.textContent = txt;
-  return e;
-}
-
-function renderQ() {
-  var q = Q[cq];
-  var prog = Math.round((cq / Q.length) * 100);
-  document.getElementById('pf').style.width = prog + '%';
-  document.getElementById('qc').textContent = (cq + 1) + ' / ' + Q.length;
-
-  var card = document.getElementById('qcard');
-  card.innerHTML = '';
-
-  var blkEl = mk('div','qblock', q.blk);
-  card.appendChild(blkEl);
-
-  var qtEl = mk('div','qtext');
-  qtEl.innerHTML = q.txt;
-  card.appendChild(qtEl);
-
-  if (q.sub) {
-    card.appendChild(mk('div','qsub', q.sub));
-  }
-
-  var cur = ans[q.id];
-
-  if (q.tp === 'scale') {
-    var sw = mk('div','scale-wrap');
-    var sl = mk('div','scale-lbs');
-    sl.innerHTML = '<span>1 — Sin impacto</span><span>10 — Impacto máximo</span>';
-    sw.appendChild(sl);
-    var sb = mk('div','scale-btns');
-    for (var i = 1; i <= 10; i++) {
-      (function(val) {
-        var btn = document.createElement('button');
-        btn.className = 'sbtn' + (cur === val ? ' sel' : '');
-        btn.textContent = val;
-        btn.onclick = function() {
-          ans[q.id] = val;
-          card.querySelectorAll('.sbtn').forEach(function(x) { x.classList.remove('sel'); });
-          btn.classList.add('sel');
-          setTimeout(adv, 320);
-        };
-        sb.appendChild(btn);
-      })(i);
-    }
-    sw.appendChild(sb);
-    card.appendChild(sw);
-
-  } else if (q.tp === 'single') {
-    var optsEl = mk('div','opts');
-    q.opts.forEach(function(o) {
-      var d = document.createElement('div');
-      d.className = 'opt' + (cur === o.l ? ' sel' : '');
-      d.innerHTML = '<span class="oico">' + (o.i || '') + '</span>'
-        + '<span class="otxt"><span class="olb">' + o.l + '</span>'
-        + (o.s ? '<span class="osb">' + o.s + '</span>' : '')
-        + '</span><span class="ochk"></span>';
-      d.onclick = function() {
-        ans[q.id] = o.l;
-        card.querySelectorAll('.opt').forEach(function(x) { x.classList.remove('sel'); });
-        d.classList.add('sel');
-        setTimeout(adv, 280);
-      };
-      optsEl.appendChild(d);
-    });
-    card.appendChild(optsEl);
-    var btnEl = document.createElement('button');
-    btnEl.className = 'btnnext';
-    btnEl.textContent = 'Continuar →';
-    btnEl.disabled = !cur;
-    btnEl.onclick = adv;
-    card.appendChild(btnEl);
-
-  } else if (q.tp === 'multi') {
-    card.appendChild(mk('div','multi-hint','Puedes seleccionar varias opciones'));
-    var optsEl2 = mk('div','opts');
-    var sel = cur ? [].concat(cur) : [];
-    q.opts.forEach(function(o) {
-      var d = document.createElement('div');
-      d.className = 'opt' + (sel.indexOf(o.l) > -1 ? ' sel' : '');
-      d.innerHTML = '<span class="oico">' + (o.i || '') + '</span>'
-        + '<span class="otxt"><span class="olb">' + o.l + '</span></span>'
-        + '<span class="ochk"></span>';
-      d.onclick = function() {
-        var idx = sel.indexOf(o.l);
-        if (idx > -1) sel.splice(idx, 1); else sel.push(o.l);
-        ans[q.id] = sel.slice();
-        d.classList.toggle('sel');
-      };
-      optsEl2.appendChild(d);
-    });
-    card.appendChild(optsEl2);
-    var btnEl2 = document.createElement('button');
-    btnEl2.className = 'btnnext';
-    btnEl2.textContent = 'Continuar →';
-    btnEl2.onclick = adv;
-    card.appendChild(btnEl2);
-  }
-}
-
-function adv() {
-  if (cq < Q.length - 1) {
-    cq++;
-    renderQ();
-    window.scrollTo(0, 0);
-  } else {
-    genPlan();
-  }
-}
-
-function wait(ms) {
-  return new Promise(function(resolve) { setTimeout(resolve, ms); });
-}
-
-async function genPlan() {
-  showSc('sc-g');
-  for (var i = 0; i < 5; i++) {
-    await wait(600);
-    if (i > 0) document.getElementById('gs' + (i-1)).className = 'gstep done';
-    document.getElementById('gs' + i).className = 'gstep cur';
-  }
-
-  var summary = Q.map(function(q) {
-    var a = ans[q.id];
-    if (a === undefined || a === null) return '';
-    var val = Array.isArray(a) ? a.join(', ') : a;
-    return '- ' + q.id + ': ' + val;
-  }).filter(Boolean).join('\n');
-
-  var prompt = 'Eres el sistema de diagnóstico de Preactiva, empresa colombiana especializada en adicciones y bienestar integral fundada en 2015.\n\n'
-    + 'RESPUESTAS DEL CUESTIONARIO:\n' + summary + '\n\n'
-    + 'Analiza el perfil clínico y recomienda el plan más adecuado según el nivel de impacto, tiempo con la adicción, intentos previos, urgencia y disponibilidad — NO según precio ni presupuesto (el usuario no sabe los precios todavía).\n\n'
-    + 'Criterios de recomendación:\n'
-    + '- Plan Básico: impacto moderado (1-5), primera vez buscando ayuda, disponibilidad limitada, situación estable.\n'
-    + '- Plan Semi Intensivo: impacto medio-alto (5-7), varios intentos previos, afectación en múltiples áreas.\n'
-    + '- Plan Intensivo: impacto muy alto (7-10), en crisis, múltiples recaídas, afectación severa, necesidad urgente.\n\n'
-    + 'Responde SOLO con JSON válido, sin markdown, sin texto adicional:\n'
-    + '{"nombre_plan":"Plan Básico","precio":"$1.050.000","sesiones":"4 sesiones individuales / mes","subtitulo":"TÍTULO DE <span>PLAN</span>","intro":"2-3 frases empáticas y personalizadas. Español colombiano cálido.","diagnostico":"3-4 párrafos de diagnóstico profundo con <strong>negrillas</strong> para conceptos clave. Menciona tipo de adicción, tiempo, impacto, intentos previos, estado emocional y motivación. Empático. Español colombiano.","justificacion":"2 frases explicando por qué este nivel de acompañamiento es el más adecuado clínicamente para esta persona — sin mencionar precio.","ejercicios":[{"i":"emoji","n":"Nombre ejercicio","r":"Por qué es prioritario — 1 frase"},{"i":"emoji","n":"Nombre ejercicio","r":"Por qué es prioritario — 1 frase"},{"i":"emoji","n":"Nombre ejercicio","r":"Por qué es prioritario — 1 frase"}]}';
-
-  try {
-    var res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    var data = await res.json();
-    var txt = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '{}';
-    txt = txt.replace(/```json/g,'').replace(/```/g,'').trim();
-    var plan = JSON.parse(txt);
-    selPlan = plan.nombre_plan || 'Básico';
-    aiDx = JSON.stringify(plan);
-    await wait(400);
-    document.getElementById('gs4').className = 'gstep done';
-    await wait(400);
-    renderRes(plan);
-    showSc('sc-r');
-  } catch(e) {
-    console.error('AI error:', e);
-    var fb = fallback();
-    selPlan = fb.nombre_plan;
-    renderRes(fb);
-    showSc('sc-r');
-  }
-}
-
-function fallback() {
-  var imp = ((ans.imp_salud||5) + (ans.imp_trabajo||5) + (ans.imp_familia||5) + (ans.imp_dinero||5)) / 4;
-  var urgencia = ans.estado || '';
-  var n = 'Plan Básico', p = '$1.050.000', s = '4 sesiones individuales / mes';
-  if (urgencia.indexOf('crisis') > -1 || imp >= 8) {
-    n = 'Plan Intensivo'; p = '$1.950.000'; s = '12 sesiones / mes';
-  } else if (imp >= 6 || urgencia.indexOf('afectado') > -1) {
-    n = 'Plan Semi Intensivo'; p = '$1.700.000'; s = '8 sesiones individuales / mes';
-  }
-  return {
-    nombre_plan: n, precio: p, sesiones: s,
-    subtitulo: 'TU RUTA DE <span>RECUPERACIÓN</span>',
-    intro: 'Hemos analizado tu situación con cuidado. Tu proceso de recuperación es posible y estamos aquí para acompañarte en cada paso.',
-    diagnostico: 'Basado en tus respuestas, identificamos una situación que merece atención especializada y acompañamiento continuo. Tu disposición para buscar ayuda es el primer y más importante paso.\n\nEn Preactiva trabajamos desde un enfoque integral que aborda <strong>cuerpo, mente, emoción y espíritu</strong>. Tu plan está diseñado para adaptarse a tu realidad y avanzar a tu ritmo.\n\nEl proceso terapéutico de 4 etapas te llevará desde la valoración inicial hasta construir un nuevo estilo de vida sostenible.',
-    justificacion: 'Este plan se ajusta a tu disponibilidad y nivel de impacto actual, con el acompañamiento necesario para avanzar de forma segura.',
-    ejercicios: [
-      {i:'🧘',n:'Respiración 4-7-8',r:'Para manejar el craving y la ansiedad de forma inmediata.'},
-      {i:'🗺️',n:'Mapa de situaciones de riesgo',r:'Para identificar tus triggers específicos desde el inicio.'},
-      {i:'🌱',n:'Inventario personal',r:'Para comenzar el reconocimiento del ser en la Etapa 1.'}
-    ]
-  };
-}
-
-function renderRes(plan) {
-  document.getElementById('rnm').innerHTML = plan.subtitulo || 'TU PLAN <span>PREACTIVA</span>';
-  document.getElementById('rint').textContent = plan.intro || '';
-  document.getElementById('rdiag').innerHTML = (plan.diagnostico || '').replace(/\n/g,'<br/><br/>');
-
-  var pc = document.getElementById('rplan');
-  pc.innerHTML = '<div class="plhd">'
-    + '<div class="plnm">' + (plan.nombre_plan || '') + '</div>'
-    + '<div class="plbg">Recomendado</div></div>'
-    + '<div class="plprice">' + (plan.precio || '') + '/mes</div>'
-    + '<div class="plnote">' + (plan.justificacion || '') + '</div>'
-    + '<div class="plft">'
-    + '<div class="plfi">' + (plan.sesiones || '') + '</div>'
-    + '<div class="plfi">Terapia grupal presencial · 1 vez/semana</div>'
-    + '<div class="plfi">Acompañamiento 24/7 vía WhatsApp</div>'
-    + '<div class="plfi">1 psicoterapia familiar / mes</div>'
-    + '<div class="plfi">Agenda de sesiones virtuales en la app</div>'
-    + '</div>';
-
-  var sg = document.getElementById('rstages');
-  sg.innerHTML = '';
-  [{n:'E0',nm:'Valoración Integral',dr:'~1 mes',cur:true},
-   {n:'E1',nm:'Conciencia',dr:'2–4 meses',cur:false},
-   {n:'E2',nm:'Sanación',dr:'3–6 meses',cur:false},
-   {n:'E3',nm:'Estilo de vida',dr:'2–4 meses',cur:false}
-  ].forEach(function(s) {
-    var r = document.createElement('div');
-    r.className = 'strow';
-    r.innerHTML = '<div class="stico">' + s.n + '</div>'
-      + '<div><div class="stnm">' + s.nm + '</div><div class="stdr">' + s.dr + '</div></div>'
-      + (s.cur ? '<div class="stcur">Tu inicio</div>' : '');
-    sg.appendChild(r);
-  });
-
-  var ex = document.getElementById('rexs');
-  ex.innerHTML = '';
-  var ejercicios = plan.ejercicios || [];
-  ejercicios.forEach(function(e) {
-    var r = document.createElement('div');
-    r.className = 'expill';
-    r.innerHTML = '<div class="epic">' + e.i + '</div>'
-      + '<div><div class="epnm">' + e.n + '</div><div class="epwhy">' + e.r + '</div></div>';
-    ex.appendChild(r);
-  });
-
-  document.getElementById('rpn').textContent = (plan.nombre_plan || 'Básico').replace('Plan ','');
-}
-
-function goReg() {
-  showSc('sc-reg');
-}
-
-async function doReg() {
-  var nm = document.getElementById('rnm2').value.trim();
-  var tel = document.getElementById('rtel').value.trim();
-  var em = document.getElementById('rem').value.trim();
-  var pw = document.getElementById('rpw').value;
-  var err = document.getElementById('rerr');
-  var ok = document.getElementById('rok');
-  var btn = document.getElementById('btnreg');
-
-  err.classList.remove('show');
-  ok.classList.remove('show');
-
-  if (!nm || !em || !pw) {
-    err.textContent = 'Completa nombre, correo y contraseña.';
-    err.classList.add('show');
-    return;
-  }
-  if (pw.length < 6) {
-    err.textContent = 'La contraseña debe tener mínimo 6 caracteres.';
-    err.classList.add('show');
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Creando tu cuenta...';
-
-  var perfil = {
-    nombre: nm, telefono: tel, email: em,
-    situacion: (ans.tipo || '').split(' ')[0].toLowerCase(),
-    situacion_completa: ans.tipo,
-    adicciones_extra: ans.extra,
-    tiempo: ans.tiempo,
-    intentos: ans.intentos,
-    tratamiento: ans.tratamiento,
-    imp_salud: ans.imp_salud,
-    imp_trabajo: ans.imp_trabajo,
-    imp_familia: ans.imp_familia,
-    imp_dinero: ans.imp_dinero,
-    motivacion: ans.motivacion,
-    disposicion: ans.disposicion,
-    emociones: ans.emociones,
-    triggers: ans.triggers,
-    red_apoyo: ans.apoyo,
-    edad: ans.edad,
-    genero: ans.genero,
-    rol: ans.rol,
-    disponibilidad: ans.disponibilidad,
-    estado: ans.estado,
-    plan_recomendado: selPlan,
-    diagnostico_ia: aiDx,
-    fecha: new Date().toISOString()
-  };
-
-  localStorage.setItem('preactiva_perfil', JSON.stringify(perfil));
-
-  try {
-    var result = await SB.auth.signUp({
-      email: em,
-      password: pw,
-      options: { data: { name: nm, telefono: tel } }
-    });
-
-    btn.disabled = false;
-    btn.textContent = 'Continuar al pago →';
-
-    if (result.error) {
-      var emsg = result.error.message.toLowerCase();
-      if (emsg.indexOf('already') > -1 || emsg.indexOf('exists') > -1) {
-        // Email already registered — try login, then go to payment
-        var loginResult = await SB.auth.signInWithPassword({ email: em, password: pw });
-        if (!loginResult.error) {
-          ok.textContent = '✓ Sesión iniciada. Pasando al pago...';
-          ok.classList.add('show');
-          setTimeout(function() { showPayScreen(); }, 900);
-          return;
-        } else {
-          err.textContent = 'Ya tienes una cuenta con ese correo. Verifica tu contraseña.';
-          err.classList.add('show');
-          return;
+function showApp(){
+  document.getElementById('sc-login').classList.add('hidden');
+  document.getElementById('sc-register').classList.add('hidden');
+  document.getElementById('mainapp').style.display='flex';
+  if(CU){
+    const m=CU.user_metadata;
+    const name=m?.name||CU.email||'Usuario';
+    const ini=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('uava').textContent=ini;
+    try{
+      const p=JSON.parse(localStorage.getItem('preactiva_perfil'));
+      if(p){
+        const nm={'alcohol':'Alcohol','drogas':'Drogas','tabaco':'Tabaco','ludopatia':'Ludopatía',
+          'ciberadiccion':'Ciberadicción','codependencia':'Codependencia','ansiedad':'Ansiedad',
+          'depresion':'Depresión','workaholic':'Workaholic','vigorexia':'Vigorexia','oniomanía':'Oniomanía'};
+        const sit=nm[p.situacion]||'';
+        if(sit)document.getElementById('addbadge').textContent='✦ Plan activo: '+sit;
+        if(p.nombre){
+          const fn=p.nombre.split(' ')[0];
+          const g=document.querySelector('#s-proceso .grt');
+          if(g)g.innerHTML='Hola, <em>'+fn+'</em>';
         }
       }
-      err.textContent = result.error.message;
-      err.classList.add('show');
-    } else {
-      // Proceed to payment regardless of email confirmation status
-      ok.textContent = '✓ Cuenta creada. Pasando al pago...';
-      ok.classList.add('show');
-      setTimeout(function() { showPayScreen(); }, 1200);
-    }
-
-  } catch(e) {
-    // Network error or CORS (e.g. running outside Vercel) — perfil ya está
-    // guardado en localStorage, procedemos al pago de todas formas
-    btn.disabled = false;
-    btn.textContent = 'Continuar al pago →';
-    ok.textContent = '✓ Datos guardados. Pasando al pago...';
-    ok.classList.add('show');
-    setTimeout(function() { showPayScreen(); }, 1000);
+    }catch(e){}
   }
 }
+async function doLogin(){
+  const em=document.getElementById('lem').value.trim(),pw=document.getElementById('lpw').value;
+  const el=document.getElementById('lerr'),btn=document.getElementById('btnl');
+  el.classList.remove('show');
+  if(!em||!pw){el.textContent='Completa todos los campos.';el.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Ingresando...';
+  const {error}=await SB.auth.signInWithPassword({email:em,password:pw});
+  btn.disabled=false;btn.textContent='Ingresar';
+  if(error){el.textContent=error.message.includes('Invalid')?'Correo o contraseña incorrectos.':error.message;el.classList.add('show');}
+}
+async function doRegister(){
+  const nm=document.getElementById('rnm').value.trim(),em=document.getElementById('rem').value.trim(),pw=document.getElementById('rpw').value;
+  const el=document.getElementById('rerr'),ok=document.getElementById('rok'),btn=document.getElementById('btnr');
+  el.classList.remove('show');ok.classList.remove('show');
+  if(!nm||!em||!pw){el.textContent='Completa todos los campos.';el.classList.add('show');return;}
+  if(pw.length<6){el.textContent='Mínimo 6 caracteres.';el.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Creando...';
+  const {error}=await SB.auth.signUp({email:em,password:pw,options:{data:{name:nm}}});
+  btn.disabled=false;btn.textContent='Crear cuenta';
+  if(error){el.textContent=error.message;el.classList.add('show');}
+  else{ok.textContent='Cuenta creada. Revisa tu correo para confirmar.';ok.classList.add('show');setTimeout(()=>showSc('login'),2500);}
+}
+async function doLogout(){if(confirm('¿Cerrar sesión?'))await SB.auth.signOut();}
 
-function showPayScreen() {
-  // Plan config: precio completo, precio con bono, centavos con bono, referencia, firma SHA256
-  var planData = {
-    'Plan Básico': {
-      full: '$1.050.000', precio: '$1.000.000', cents: 100000000,
-      ref: 'PREACTIVA-BASICO',
-      baseRef: 'PREACTIVA-BASICO',
-      sig: 'e354b9304a4fd4129a4fcb1e6521a89045db94caa7b1b309b587ee41ca3f033e',
-      features: '✓ 4 sesiones individuales / mes · 60 min c/u<br/>✓ Terapia grupal · 1 vez/semana<br/>✓ Acompañamiento 24/7 WhatsApp<br/>✓ 1 psicoterapia familiar / mes'
-    },
-    'Plan Semi Intensivo': {
-      full: '$1.700.000', precio: '$1.650.000', cents: 165000000,
-      ref: 'PREACTIVA-SEMI',
-      baseRef: 'PREACTIVA-SEMI',
-      sig: '0cd16209f4735511d9dc6ac4d3b2e2643d63bb97e34266f7d02835270909d65a',
-      features: '✓ 8 sesiones individuales / mes · 60 min c/u<br/>✓ Terapia grupal · 1 vez/semana<br/>✓ Acompañamiento 24/7 WhatsApp<br/>✓ 1 psicoterapia familiar / mes'
-    },
-    'Plan Intensivo': {
-      full: '$1.950.000', precio: '$1.900.000', cents: 190000000,
-      ref: 'PREACTIVA-INTENSIVO',
-      baseRef: 'PREACTIVA-INTENSIVO',
-      sig: 'c3e5ef107d6b2a2f8a12c633f3336249a9e612df9223769f2f2243c80d59e20e',
-      features: '✓ 4 sesiones con psicólogo clínico / mes<br/>✓ 8 sesiones con terapeuta / mes<br/>✓ Terapia grupal · 1 vez/semana<br/>✓ Acompañamiento 24/7 WhatsApp'
-    }
+function nav(s){
+  document.querySelectorAll('.sec').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(x=>x.classList.remove('on'));
+  document.getElementById('s-'+s).classList.add('active');
+  document.getElementById('n-'+s).classList.add('on');
+  document.getElementById('cnt').scrollTop=0;
+}
+
+function showStage(btn,id){
+  document.querySelectorAll('#stabs .tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['e0','e1','e2','e3'].forEach(t=>{const el=document.getElementById('t'+t);if(el)el.style.display=t===id?'block':'none';});
+  const S={
+    e0:{ey:'Etapa 0 · Valoración Integral',nm:'VALO<span>RACIÓN</span>',ds:'Perfilamiento profundo, vínculo terapéutico y estrategia personalizada.',pr:'20%',pl:'Semana 1 de ~4 · Etapa activa'},
+    e1:{ey:'Etapa 1 · Conciencia',nm:'CON<span>CIENCIA</span>',ds:'Reconocimiento del ser, aceptación de la adicción como enfermedad.',pr:'42%',pl:'Mes 1 de 2-4 · En proceso'},
+    e2:{ey:'Etapa 2 · Sanación',nm:'SANA<span>CIÓN</span>',ds:'Limpieza emocional, trabajo de perdón y fortalecimiento espiritual.',pr:'65%',pl:'Mes 2 de 3-6 · En proceso'},
+    e3:{ey:'Etapa 3 · Estilo de Vida',nm:'ESTILO DE <span>VIDA</span>',ds:'Proyecto de vida, rutinas de bienestar y plan de sostenimiento.',pr:'85%',pl:'Mes 1 de 2-4 · Fase final'}
   };
+  const s=S[id];
+  document.getElementById('stEy').textContent=s.ey;
+  document.getElementById('stNm').innerHTML=s.nm;
+  document.getElementById('stDs').textContent=s.ds;
+  document.getElementById('stPr').style.width=s.pr;
+  document.getElementById('stPl').textContent=s.pl;
+}
 
-  var data = planData[selPlan] || planData['Plan Básico'];
-  var userEmail = document.getElementById('rem') ? document.getElementById('rem').value : '';
-  var userName  = document.getElementById('rnm2') ? document.getElementById('rnm2').value : '';
-  var userPhone = document.getElementById('rtel') ? document.getElementById('rtel').value : '';
+function showExCat(btn,id){
+  document.querySelectorAll('#ectabs .tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['universal','sustancias','conductas','emocional'].forEach(c=>{
+    const el=document.getElementById('ec-'+c);if(el)el.style.display=c===id?'block':'none';
+  });
+}
 
-  // Populate UI
-  var el = function(id) { return document.getElementById(id); };
-  if (el('pay-plan-name'))  el('pay-plan-name').textContent  = selPlan;
-  if (el('pay-precio-full'))el('pay-precio-full').textContent = data.full;
-  if (el('pay-precio'))     el('pay-precio').textContent     = data.precio;
-  if (el('pay-features'))   el('pay-features').innerHTML     = data.features;
-  if (el('pay-monto'))      el('pay-monto').textContent      = data.precio;
+// ── EXERCISES DATA ────────────────────────────────────
+const EX={
+  respiracion:{t:'🧘 Respiración 4-7-8',s:`Eres guía terapéutico en Preactiva. Guías la técnica 4-7-8: inhalar 4 seg, retener 7, exhalar 8. Haz 4 ciclos. Ve despacio, confirma entre ciclos. Español colombiano, cálido, sin asteriscos.`},
+  mapa:{t:'🗺️ Mapa de situaciones de riesgo',s:`Eres especialista en prevención de recaídas en Preactiva. Construyes el mapa personal: 1) Triggers. 2) Pensamientos/sensaciones por trigger. 3) Estrategias alternativas. 4) Resumen del mapa. Empático. Español colombiano.`},
+  inventario_situacion:{t:'📊 Inventario de mi situación actual',s:`Eres terapeuta en Preactiva haciendo la Etapa 0. Evalúas el impacto de la adicción en: salud, trabajo/estudio, familia, vida social, finanzas y espiritualidad. Sin juzgar. Escucha activa. Español colombiano.`},
+  inventario:{t:'🌱 Inventario personal',s:`Eres terapeuta en Preactiva. Guías el reconocimiento del ser: creencias, valores, defectos, habilidades. Preguntas profundas pero suaves. Etapa 1. Español colombiano.`},
+  pensamientos:{t:'📝 Registro de pensamientos automáticos',s:`Eres terapeuta cognitivo en Preactiva. Pasos: 1) Situación con impulso. 2) Pensamiento automático. 3) Emoción. 4) Cuestiona el pensamiento. 5) Alternativa. Empático. Español colombiano.`},
+  carta:{t:'🧠 Carta a mi yo futuro',s:`Eres guía en Preactiva. 1) Imagina tu vida en 2 años de recuperación. 2) Logros y relaciones. 3) Escribe la carta en primera persona. 4) Reflexión. Cálido, celebra. Español colombiano.`},
+  perdon:{t:'💚 Trabajo de perdón',s:`Eres terapeuta en Preactiva. 1) ¿A quién necesitas perdonar (incluyéndote a ti)? 2) Emoción detrás. 3) ¿Qué significaría soltar ese peso? 4) Carta de perdón guiada. Muy empático. Etapa 2. Español colombiano.`},
+  generacional:{t:'🌳 Descodificación generacional',s:`Eres terapeuta en Preactiva. Exploras patrones familiares: ¿quién más en la familia tuvo esta situación? ¿Qué mensajes recibiste de niño sobre las emociones o el placer? Profundo y suave. Etapa 2. Español colombiano.`},
+  proposito:{t:'✨ Conexión con propósito interior',s:`Eres guía espiritual-terapéutico en Preactiva. Sin religión específica: ¿qué le da sentido a tu vida? ¿para qué quieres recuperarte? Conexión con algo más grande que la adicción. Etapa 2. Español colombiano.`},
+  relajacion:{t:'🌿 Relajación muscular progresiva',s:`Eres guía en Preactiva. Técnica Jacobson: pies→pantorrillas→muslos→abdomen→manos→brazos→hombros→cuello→cara. 5 seg tensión, 10 soltando. Confirma entre grupos. Español colombiano.`},
+  proyecto:{t:'🚀 Proyecto de vida',s:`Eres coach en Preactiva. 1) ¿Cómo quieres tu vida en 1, 3 y 5 años? 2) Áreas: trabajo, familia, salud, espíritu. 3) Primer paso concreto para esta semana. Etapa 3. Motivador. Español colombiano.`},
+  sueno:{t:'💤 Higiene del sueño',s:`Eres terapeuta en Preactiva. Diseñas rutina de sueño: hora fija, ritual antes de dormir, ambiente. Conectas con recuperación emocional. Etapa 3. Práctico. Español colombiano.`},
+  autoenganos:{t:'🔄 Identificación de autoengaños',s:`Eres terapeuta en Preactiva. Etapa 3. Ayudas a reconocer las narrativas internas que abren la puerta a la recaída: "solo esta vez", "ya puedo controlarlo", "me lo merezco". Sin juzgar. Español colombiano.`},
+  diario_alcohol:{t:'📊 Diario de consumo de alcohol',s:`Eres terapeuta en Preactiva para alcohol. Etapa 0. Construyes el diario: frecuencia, cantidad, horarios, contextos, emociones antes y después. Sin juzgar, solo observar. Español colombiano.`},
+  halt:{t:'🛑 Técnica HALT',s:`Eres terapeuta en Preactiva para alcohol. HALT: ¿Hambriento (Hungry), Enojado (Angry), Solitario (Lonely) o Cansado (Tired)? Identifica cuál está activo ahora y trabaja esa necesidad real. Español colombiano.`},
+  presion_social:{t:'🤝 Manejo de presión social',s:`Eres terapeuta en Preactiva para alcohol. Entrenas decir no: lenguaje claro, alternativas, escape de situaciones. Roleplay de escenas difíciles. Práctico. Español colombiano.`},
+  emoc_alcohol:{t:'🔍 Emoción detrás del alcohol',s:`Eres terapeuta en Preactiva. Exploras la función emocional del alcohol: ¿qué sientes que te da? ¿qué evitas sentir? Trabajo empático y sin juicios. Español colombiano.`},
+  plan_recaida_alc:{t:'🌊 Plan de recaída para alcohol',s:`Eres terapeuta en Preactiva. Etapa 3. Diseñas el plan de respuesta ante una recaída: ¿qué haces el mismo día? ¿a quién llamas? ¿cómo vuelves al proceso sin colapsar? Español colombiano.`},
+  craving_emergencia:{t:'🆘 Crisis ante craving intenso',s:`Eres terapeuta de emergencias en Preactiva. Protocolo de crisis: 1) Respira. 2) Identifica dónde estás. 3) Llama a tu red de apoyo. 4) Cambia de ambiente. 5) Escríbeme todo lo que sientes ahora. Presente, contenedor. Español colombiano.`},
+  detox_emocional:{t:'🔍 Desintoxicación emocional',s:`Eres terapeuta en Preactiva. ¿Qué emoción estás tratando de evitar o amplificar con el consumo? ¿Qué necesita esa emoción? Trabajo profundo pero suave. Español colombiano.`},
+  entornos_riesgo:{t:'🗺️ Mapeo de entornos de riesgo',s:`Eres especialista en recaídas en Preactiva. Mapeas personas, lugares y momentos de riesgo. Diseñan juntos rutas seguras y respuestas preparadas para cada escenario. Español colombiano.`},
+  duelo_consumo:{t:'🤲 Duelo por el consumo',s:`Eres terapeuta en Preactiva. Dejar una adicción implica un duelo: se pierde algo que sentías que te ayudaba. Acompañas ese proceso sin minimizarlo. Etapa 2. Español colombiano.`},
+  cinco_minutos:{t:'⏱️ Técnica 5 minutos (nicotina)',s:`Eres terapeuta en Preactiva para tabaco. El craving de nicotina dura 5 minutos. Guías al paciente para surfear esa ola: respiración, movimiento, distracción activa. Acompañas en tiempo real. Español colombiano.`},
+  sustitucion:{t:'🔄 Sustitución del hábito del cigarro',s:`Eres terapeuta en Preactiva. Identificas: detonante del cigarro, la rutina actual, la recompensa buscada. Propones alternativas saludables que den la misma recompensa. Práctico. Español colombiano.`},
+  diario_tabaco:{t:'📝 Diario de consumo de nicotina',s:`Eres terapeuta en Preactiva para tabaco. Construyes el diario: ¿cuántos cigarros? ¿en qué momentos? ¿con qué emoción? Mapa sin juzgar. Etapa 0. Español colombiano.`},
+  inventario_financiero:{t:'💸 Inventario financiero (ludopatía)',s:`Eres terapeuta en Preactiva para ludopatía. Evalúan impacto financiero honestamente: deudas, pérdidas, préstamos. Sin juzgar. Luego diseñan límites de acceso concretos. Español colombiano.`},
+  impulso_juego:{t:'⚡ Ciclo del impulso de jugar',s:`Eres terapeuta en Preactiva. Mapeas el ciclo del impulso de jugar: ¿qué lo activa? ¿qué sientes antes, durante y después? Conciencia del ciclo para poder interrumpirlo. Español colombiano.`},
+  limites_juego:{t:'🔒 Plan de límites de acceso (ludopatía)',s:`Eres terapeuta en Preactiva. Diseñan barreras concretas para la ludopatía: bloqueo de apps, aliados de control, efectivo limitado, horarios. Práctico y concreto. Español colombiano.`},
+  vacio_juego:{t:'🧩 El vacío detrás del juego',s:`Eres terapeuta en Preactiva. La ludopatía llena un vacío emocional: emoción, adrenalina, escape. ¿Cuál es el vacío del paciente? Exploración empática y profunda. Etapa 2. Español colombiano.`},
+  auditoria_pantalla:{t:'📱 Auditoría de pantalla',s:`Eres terapeuta en Preactiva para ciberadicción. Revisas: ¿cuántas horas diarias? ¿qué plataformas? ¿qué emociones buscas online que no encuentras offline? Diagnóstico sin juzgar. Español colombiano.`},
+  desconexion:{t:'🌿 Rutina de desconexión digital',s:`Eres terapeuta en Preactiva. Diseñas la desconexión: horarios sin pantallas, actividades presenciales de sustitución, límites en apps. Gradual y sostenible. Español colombiano.`},
+  identidad_digital:{t:'🧍 Identidad fuera de la pantalla',s:`Eres terapeuta en Preactiva. Reconstruyes identidad en el mundo físico: ¿qué te gusta hacer sin pantalla? ¿cómo son tus relaciones presenciales? ¿qué extrañas del mundo físico? Etapa 2. Español colombiano.`},
+  limites:{t:'🔗 Límites emocionales',s:`Eres terapeuta en Preactiva para codependencia. Trabajas límites: ¿qué es un límite? ¿dónde no tienes? ¿qué sientes cuando alguien los cruza? Práctica verbal de límites. Etapa 1. Español colombiano.`},
+  identidad:{t:'🪞 Construcción de identidad propia',s:`Eres terapeuta en Preactiva para codependencia. ¿Quién eres más allá de la relación? ¿Qué te gusta solo/a? ¿Qué quieres tú, para ti? Construcción de identidad individual. Etapa 2. Español colombiano.`},
+  asertividad:{t:'💬 Comunicación asertiva',s:`Eres terapeuta en Preactiva. Entrenas comunicación asertiva: di lo que necesitas sin manipular ni ceder totalmente. Roleplay de conversaciones difíciles. Práctico. Español colombiano.`},
+  limites_trabajo:{t:'⚖️ Límites laborales y de vida',s:`Eres terapeuta en Preactiva para workaholic. ¿Qué parte de tu identidad está en el trabajo? ¿Qué evitas cuando paras? Exploración de los límites sanos. Español colombiano.`},
+  descanso_culpa:{t:'🧘 Aprendiendo a descansar sin culpa',s:`Eres terapeuta en Preactiva para workaholic. Exploras la culpa detrás del descanso: ¿qué mensaje recibiste sobre no hacer nada? ¿qué tiene de malo el ocio? Suave y compasivo. Etapa 2. Español colombiano.`},
+  imagen_corporal:{t:'🪞 Relación sana con el cuerpo',s:`Eres terapeuta en Preactiva para vigorexia. ¿Qué sientes cuando no puedes entrenar? ¿Qué está controlando el ejercicio en tu vida? Exploración de la imagen corporal. Español colombiano.`},
+  registro_ejercicio:{t:'📋 Registro de hábitos de ejercicio',s:`Eres terapeuta en Preactiva para vigorexia. Construyes el registro: frecuencia, duración, emociones antes y después. Mapa del comportamiento sin juzgar. Etapa 0. Español colombiano.`},
+  pausa48:{t:'⏸️ Técnica de pausa 48 horas',s:`Eres terapeuta en Preactiva para oniomanía. Antes de comprar el impulso, espera 48 horas. Acompañas esa espera: ¿qué sientes? ¿sigue siendo urgente? ¿qué necesidad real hay detrás? Español colombiano.`},
+  inventario_compras:{t:'💳 Inventario de compras impulsivas',s:`Eres terapeuta en Preactiva para oniomanía. Construyes el inventario: ¿qué compras? ¿cuándo? ¿qué sientes antes y después? ¿qué cubre emocionalmente? Mapa sin juzgar. Etapa 0. Español colombiano.`},
+  grounding:{t:'🌊 Técnica 5-4-3-2-1',s:`Eres terapeuta de emergencias en Preactiva para ansiedad. Grounding: 5 ves, 4 tocas, 3 oyes, 2 hueles, 1 saboreas. Despacio, paso a paso. Ancla al presente. Español colombiano.`},
+  reestructuracion:{t:'🧩 Reestructuración cognitiva',s:`Eres terapeuta cognitivo en Preactiva para ansiedad. 1) Pensamiento ansioso. 2) ¿Qué tan probable es? 3) Evidencia a favor y en contra. 4) Pensamiento más realista. Metódico y empático. Español colombiano.`},
+  curva_craving:{t:'📉 Curva del craving y la ansiedad',s:`Eres terapeuta en Preactiva. Explicas y trabajas la curva del craving: sube, llega al pico y baja. El objetivo es aguantar sin actuar. Acompañas al paciente a surfear la ola. Español colombiano.`},
+  activacion:{t:'☀️ Activación conductual gradual',s:`Eres terapeuta en Preactiva para depresión. La inactividad alimenta la depresión. Diseñan 1 actividad placentera pequeña para hoy y para esta semana. Muy gradual, sin exigir. Celebras cada paso. Español colombiano.`},
+  validacion_emocional:{t:'😶 Registro y validación emocional',s:`Eres terapeuta en Preactiva para depresión. ¿Qué sientes hoy? Ayudas a nombrar, validar y sostener las emociones sin combatirlas. "Tienes derecho a sentir esto." Suave. Español colombiano.`},
+  alimentacion:{t:'🍽️ Alimentación consciente',s:`Eres terapeuta en Preactiva para trastornos alimentarios. ¿Comes por hambre real o emocional? Sin dietas, sin juicios sobre el cuerpo. Exploración suave y compasiva. Español colombiano.`},
+  relacion_cuerpo:{t:'🪞 Relación con el cuerpo y la comida',s:`Eres terapeuta en Preactiva. Historia de la relación con la comida y el cuerpo: ¿qué mensajes recibiste de niño/a? ¿qué sientes al mirarte? Trabajo suave y sin juicios. Etapa 2. Español colombiano.`},
+  lugar_seguro:{t:'🛡️ Lugar seguro interior',s:`Eres terapeuta en Preactiva para trauma. Guías una visualización: construye un lugar mental donde te sientas completamente seguro/a. Describe ese lugar con todos los sentidos. Voz calmada. Español colombiano.`},
+  trauma_adiccion:{t:'🤝 Trauma y adicción: la conexión',s:`Eres terapeuta en Preactiva. Exploras suavemente cómo el trauma no procesado puede estar en la raíz de la adicción. Sin presionar a revivir nada. Psicoeducación y escucha activa. Etapa 1. Español colombiano.`},
+};
 
-  // WhatsApp comprobante link
-  var waLink = el('wa-comprobante');
-  if (waLink) {
-    var msg = 'Hola Camilo, soy ' + userName + '. Acabo de realizar el pago del ' + selPlan
-      + ' (' + data.precio + '). Adjunto comprobante. Referencia: ' + data.baseRef;
-    waLink.href = 'https://wa.me/573045958153?text=' + encodeURIComponent(msg);
-  }
+let aiT=false,aiH=[],curEx=null;
 
-  // Build and inject Wompi widget
-  var container = el('wompi-widget-container');
-  if (container) {
-    container.innerHTML = '';
-
-    // Wompi script loaded in <head> — build the form
-    var form = document.createElement('form');
-    form.action    = 'https://checkout.wompi.co/p/';
-    form.method    = 'GET';
-    form.setAttribute('data-toggle', 'payment-link');
-    form.style.cssText = 'margin:0;';
-
-    var fields = [
-      ['public-key',         'pub_prod_WhuA9DPtx9XE3T8VWPZGUvF7RHfTOrrX'],
-      ['currency',           'COP'],
-      ['amount-in-cents',    String(data.cents)],
-      ['reference',          data.ref],
-      ['signature:integrity',data.sig],
-      ['redirect-url',       window.location.origin + window.location.pathname + '?wompi=ok&plan=' + encodeURIComponent(selPlan)],
-      ['customer-data:email',      userEmail],
-      ['customer-data:full-name',  userName],
-      ['customer-data:phone-number', userPhone],
-      ['customer-data:phone-number-prefix', '+57'],
-    ];
-
-    fields.forEach(function(pair) {
-      var inp = document.createElement('input');
-      inp.type  = 'hidden';
-      inp.name  = pair[0];
-      inp.value = pair[1];
-      form.appendChild(inp);
+function startEx(key){
+  if(!EX[key])return;
+  curEx=key;aiH=[];
+  document.getElementById('exptl').textContent=EX[key].t;
+  document.getElementById('aimsgs').innerHTML='';
+  document.getElementById('exlista').style.display='none';
+  document.getElementById('expanel').style.display='block';
+  document.getElementById('cnt').scrollTop=0;
+  callAI('Hola, estoy listo para comenzar el ejercicio.');
+}
+function closeEx(){
+  document.getElementById('expanel').style.display='none';
+  document.getElementById('exlista').style.display='block';
+  curEx=null;aiH=[];
+}
+function addMsg(role,txt){
+  const box=document.getElementById('aimsgs'),isU=role==='user';
+  const d=document.createElement('div');d.className='aimsg'+(isU?' user':'');
+  d.innerHTML=`<div class="aimav ${isU?'av-u':'av-ai'}">${isU?'Yo':'IA'}</div><div class="bbl ${isU?'bbl-u':'bbl-ai'}">${txt.replace(/\n/g,'<br>')}</div>`;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function showTyp(){
+  const box=document.getElementById('aimsgs');
+  const d=document.createElement('div');d.className='aimsg';d.id='typ';
+  d.innerHTML=`<div class="aimav av-ai">IA</div><div class="typing"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+  box.appendChild(d);box.scrollTop=box.scrollHeight;
+}
+function remTyp(){const t=document.getElementById('typ');if(t)t.remove();}
+async function callAI(userMsg){
+  if(aiT)return;aiT=true;
+  const btn=document.getElementById('sndbtn');if(btn)btn.disabled=true;
+  aiH.push({role:'user',content:userMsg});
+  showTyp();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:EX[curEx].s,messages:aiH})
     });
-
-    // Style the Wompi button to match brand
-    var style = document.createElement('style');
-    style.textContent = [
-      '.w-button-widget{width:100%!important;border-radius:14px!important;background:#2EC4A5!important;',
-      'font-family:"Barlow Condensed",sans-serif!important;font-weight:900!important;',
-      'font-size:15px!important;text-transform:uppercase!important;letter-spacing:.5px!important;',
-      'padding:13px!important;color:#0D4A3A!important;}'
-    ].join('');
-    document.head.appendChild(style);
-
-    container.appendChild(form);
-
-    // Re-initialize Wompi widget after DOM update
-    setTimeout(function() {
-      if (window.WidgetCheckout) {
-        try { window.WidgetCheckout.init(); } catch(e) {}
-      }
-    }, 300);
-  }
-
-  showSc('sc-pay');
+    const data=await r.json();
+    const reply=data.content?.[0]?.text||'Hubo un problema. Intenta de nuevo.';
+    remTyp();aiH.push({role:'assistant',content:reply});addMsg('assistant',reply);
+  }catch(e){remTyp();addMsg('assistant','No pude conectarme. Intenta de nuevo.');}
+  aiT=false;if(btn)btn.disabled=false;
+  const inp=document.getElementById('aiin');if(inp)inp.focus();
+}
+async function sendAI(){
+  const inp=document.getElementById('aiin'),txt=inp.value.trim();
+  if(!txt||aiT)return;inp.value='';addMsg('user',txt);await callAI(txt);
 }
 
-// Handle Wompi redirect-url callback
-function checkWompiReturn() {
-  var params = new URLSearchParams(window.location.search);
-  var wompiOk = params.get('wompi');
-  var txId     = params.get('id');
-  var planR    = params.get('plan') || selPlan;
+// DIARIO
+let selMd=null;
+function selMood(m){
+  selMd=m;
+  ['b','r','d'].forEach(x=>document.getElementById('m'+x).className='mopt');
+  document.getElementById('m'+m).classList.add('s-'+m);
+}
+function saveEntry(){
+  const txt=document.getElementById('jtxt').value.trim();
+  if(!txt||!selMd){alert('Selecciona tu estado de ánimo y escribe algo.');return;}
+  const lb={b:'😌 Bien',r:'😐 Regular',d:'😔 Difícil'},cl={b:'mb-b',r:'mb-r',d:'mb-d'};
+  const now=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  const el=document.createElement('div');el.className='jent';el.style.borderColor='var(--mn)';
+  el.innerHTML=`<div class="jdt">Hoy, ${now}</div><span class="mbadge ${cl[selMd]}">${lb[selMd]}</span><div class="jtx">${txt}</div>`;
+  document.getElementById('elist').prepend(el);
+  document.getElementById('jtxt').value='';selMd=null;
+  ['b','r','d'].forEach(x=>document.getElementById('m'+x).className='mopt');
+}
 
-  if (wompiOk === 'ok') {
-    // Restore perfil from localStorage (user came back from Wompi redirect)
-    try {
-      var p = JSON.parse(localStorage.getItem('preactiva_perfil') || '{}');
-      if (p.plan_recomendado) selPlan = p.plan_recomendado;
-    } catch(e) {}
+// TERAPEUTA
+function sendMsg(){
+  const inp=document.getElementById('chatin'),txt=inp.value.trim();if(!txt)return;
+  const chat=document.getElementById('chatmsgs');
+  const now=new Date().toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  const msg=document.createElement('div');msg.className='msg me';
+  msg.innerHTML=`<div class="mav av-me">MP</div><div><div class="mbbl mb-me">${txt}</div><div class="mtime">Ahora, ${now}</div></div>`;
+  chat.appendChild(msg);chat.scrollTop=chat.scrollHeight;inp.value='';
+  setTimeout(()=>{
+    const r=document.createElement('div');r.className='msg';
+    r.innerHTML=`<div class="mav av-tr">LC</div><div><div class="mbbl mb-th">Recibido. Te respondo en breve. Si es urgente puedes llamarme directamente.</div><div class="mtime">Ahora</div></div>`;
+    chat.appendChild(r);chat.scrollTop=chat.scrollHeight;
+  },1200);
+}
 
-    var planName = planR || selPlan;
-    var msgEl = document.getElementById('confirm-msg');
-    if (msgEl) {
-      msgEl.innerHTML = 'Tu proceso con el <strong>' + planName + '</strong> ha comenzado. '
-        + 'En las próximas horas recibirás un mensaje de WhatsApp con los detalles de tu primera sesión.';
+// COMUNIDAD
+let aN=10;
+const aC=[{b:'var(--lt)',c:'var(--dk)'},{b:'rgba(46,196,165,0.1)',c:'var(--tl)'},{b:'rgba(232,100,58,0.08)',c:'var(--cr)'},{b:'rgba(127,119,221,0.1)',c:'var(--pu)'},{b:'rgba(240,165,0,0.08)',c:'var(--am)'}];
+function pubPost(){
+  const t=document.getElementById('npinp').value.trim();if(!t)return;
+  const c=aC[aN%aC.length];
+  const el=document.createElement('div');el.className='pcard';el.style.borderColor='var(--mn)';
+  el.innerHTML=`<div class="phdr"><div class="pav" style="background:${c.b};color:${c.c}">N${aN}</div><div><div class="pnm">Anónimo #${aN}</div><div class="pago">Ahora</div></div></div><div class="ptxt">${t}</div><button class="pact" onclick="likeP(this)">&#9825; 0 apoyos</button>`;
+  document.getElementById('plist').prepend(el);document.getElementById('npinp').value='';aN++;
+}
+function likeP(btn){
+  btn.classList.toggle('liked');
+  const n=parseInt(btn.textContent.match(/\d+/)[0]);
+  btn.textContent=btn.classList.contains('liked')?`&#9829; ${n+1} apoyos`:`&#9825; ${n} apoyos`;
+}
+
+
+// ── AGENDA ────────────────────────────────────────────
+let selDia=null,selHora=null,selTipoSesion='terapeuta',agendaInited=false;
+
+function initAgenda(){
+  if(agendaInited)return;agendaInited=true;
+  // Set plan info from perfil
+  try{
+    const p=JSON.parse(localStorage.getItem('preactiva_perfil'));
+    if(p&&p.plan_recomendado){
+      const pn=p.plan_recomendado;
+      document.getElementById('agn-plan').innerHTML=pn.toUpperCase().replace('PLAN ','PLAN <span>')+' </span>';
+      const sesMap={'Plan Básico':'4 sesiones individuales / mes · 60 min c/u','Plan Semi Intensivo':'8 sesiones individuales / mes · 60 min c/u','Plan Intensivo':'12 sesiones / mes · psicólogo + terapeuta'};
+      if(sesMap[pn])document.getElementById('agn-sesiones').textContent=sesMap[pn];
+      const numMap={'Plan Básico':'1 / 4','Plan Semi Intensivo':'1 / 8','Plan Intensivo':'2 / 12'};
+      document.getElementById('agn-usadas').textContent='Usadas este mes: '+(numMap[pn]||'1 / 4');
     }
-    var txEl = document.getElementById('confirm-txid');
-    if (txEl && txId) txEl.textContent = txId;
-
-    showSc('sc-confirm');
-
-    // Clean URL
-    window.history.replaceState({}, '', window.location.pathname);
-    return true;
-  }
-  return false;
+  }catch(e){}
+  renderDias();
 }
 
-window.addEventListener('load', function() {
-  if (!checkWompiReturn()) {
-    showSc('sc-w');
+function renderDias(){
+  const wrap=document.getElementById('agn-dias');
+  wrap.innerHTML='';
+  const hoy=new Date();
+  const diasSem=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const meses=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  // show next 7 weekdays (no sunday)
+  let count=0,offset=1;
+  while(count<6){
+    const d=new Date(hoy);d.setDate(hoy.getDate()+offset);offset++;
+    if(d.getDay()===0){continue;}
+    const key=d.toISOString().split('T')[0];
+    const label=diasSem[d.getDay()]+' '+d.getDate()+' '+meses[d.getMonth()];
+    const btn=document.createElement('button');
+    btn.className='sbtn';btn.style.cssText='flex:none;width:auto;aspect-ratio:unset;padding:8px 14px;font-size:12px;font-family:var(--fb);border-radius:var(--rmd);border:1.5px solid var(--bl);background:var(--bg0);color:var(--t1);cursor:pointer;white-space:nowrap;transition:all 0.15s;';
+    btn.textContent=label;
+    btn.onclick=()=>{
+      selDia=label;selHora=null;
+      document.querySelectorAll('#agn-dias button').forEach(x=>{x.style.background='var(--bg0)';x.style.borderColor='var(--bl)';x.style.color='var(--t1)';});
+      btn.style.background='var(--lt)';btn.style.borderColor='var(--tl)';btn.style.color='var(--dk)';
+      renderHoras();document.getElementById('agn-horas-wrap').style.display='block';
+      document.getElementById('agn-confirmacion').style.display='none';
+      updateAgendar();
+    };
+    wrap.appendChild(btn);count++;
   }
-});
+}
+
+function renderHoras(){
+  const wrap=document.getElementById('agn-horas');wrap.innerHTML='';
+  const horas=['8:00 AM','9:00 AM','10:00 AM','11:00 AM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
+  horas.forEach(h=>{
+    const btn=document.createElement('button');
+    btn.style.cssText='padding:8px 14px;font-size:13px;border-radius:var(--rmd);border:1.5px solid var(--bl);background:var(--bg0);color:var(--t1);cursor:pointer;transition:all 0.15s;font-family:var(--fb);';
+    btn.textContent=h;
+    btn.onclick=()=>{
+      selHora=h;
+      document.querySelectorAll('#agn-horas button').forEach(x=>{x.style.background='var(--bg0)';x.style.borderColor='var(--bl)';x.style.color='var(--t1)';});
+      btn.style.background='var(--lt)';btn.style.borderColor='var(--tl)';btn.style.color='var(--dk)';
+      updateConfirmacion();updateAgendar();
+    };
+    wrap.appendChild(btn);
+  });
+}
+
+function selTipo(el){
+  selTipoSesion=el.dataset.tipo;
+  document.querySelectorAll('.agn-tipo').forEach(x=>{x.style.background='rgba(255,255,255,0.07)';x.style.borderColor='var(--bl)';});
+  el.style.background='rgba(46,196,165,0.12)';el.style.borderColor='var(--tl)';
+  if(selDia&&selHora)updateConfirmacion();
+}
+
+function updateConfirmacion(){
+  if(!selDia||!selHora)return;
+  const tipos={terapeuta:'Individual con terapeuta',psicologo:'Con psicólogo clínico',familiar:'Psicoterapia familiar'};
+  document.getElementById('agn-resumen').textContent=selDia+' · '+selHora+' · '+tipos[selTipoSesion]+' · 60 min';
+  document.getElementById('agn-confirmacion').style.display='block';
+}
+
+function updateAgendar(){
+  const btn=document.getElementById('btn-agendar');
+  const ok=selDia&&selHora;
+  btn.disabled=!ok;btn.style.opacity=ok?'1':'0.4';btn.style.cursor=ok?'pointer':'not-allowed';
+}
+
+function confirmarAgenda(){
+  if(!selDia||!selHora)return;
+  const tipos={terapeuta:'Individual con terapeuta',psicologo:'Con psicólogo clínico',familiar:'Psicoterapia familiar'};
+  const nuevaSesion=document.createElement('div');
+  nuevaSesion.className='card';
+  nuevaSesion.style.cssText='border-left:3px solid var(--am);border-radius:0 var(--rlg) var(--rlg) 0;margin-bottom:10px;';
+  nuevaSesion.innerHTML=`<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;"><div><div style="font-size:11px;color:var(--am);text-transform:uppercase;letter-spacing:1px;font-family:var(--fh);font-weight:700;margin-bottom:3px;">Sesión agendada</div><div style="font-size:15px;font-weight:600;color:var(--t0);">${selDia}</div><div style="font-size:13px;color:var(--t1);">${selHora} · ${tipos[selTipoSesion]}</div></div><div style="background:rgba(240,165,0,0.1);color:var(--am);border:0.5px solid rgba(240,165,0,0.3);border-radius:10px;padding:3px 10px;font-size:11px;font-weight:700;">Pendiente confirmación</div></div><div style="font-size:12px;color:var(--t2);">Te confirmaremos por WhatsApp y correo en las próximas 2 horas</div>`;
+  document.getElementById('agn-list').appendChild(nuevaSesion);
+  // Reset
+  selDia=null;selHora=null;
+  document.getElementById('agn-confirmacion').style.display='none';
+  document.getElementById('agn-horas-wrap').style.display='none';
+  renderDias();
+  const btn=document.getElementById('btn-agendar');btn.disabled=true;btn.style.opacity='0.4';
+  alert('Sesión agendada. Te confirmaremos por WhatsApp y correo en las próximas 2 horas.');
+}
+
+window.addEventListener('load',initAuth);
 </script>
 </body>
 </html>
